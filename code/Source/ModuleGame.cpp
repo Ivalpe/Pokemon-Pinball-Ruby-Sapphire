@@ -46,7 +46,7 @@ public:
 		int x, y;
 		body->GetPhysicPosition(x, y);
 		Vector2 position{ (float)x, (float)y };
-		float scale = 2.0f;
+		float scale = 1.6f;
 		Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
 		Rectangle dest = { position.x , position.y , (float)texture.width * scale , (float)texture.height * scale };
 		Vector2 origin = { ((float)texture.width / (2.0f))*scale, ((float)texture.height / (2.0f))*scale };
@@ -292,6 +292,8 @@ update_status ModuleGame::Update()
 			DrawLine((int)(ray.x + destination.x), (int)(ray.y + destination.y), (int)(ray.x + destination.x + normal.x * 25.0f), (int)(ray.y + destination.y + normal.y * 25.0f), Color{ 100, 255, 100, 255 });
 		}
 	}
+
+	TraceLog(LOG_INFO, "%d", entities.size());
 
 	return UPDATE_CONTINUE;
 }

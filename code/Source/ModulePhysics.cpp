@@ -44,6 +44,9 @@ bool ModulePhysics::Start()
 	//fixture.shape = &shape;
 	//big_ball->CreateFixture(&fixture);
 
+	CreatePinball();
+	CreateKicker();
+
 	return true;
 }
 
@@ -83,7 +86,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	pbody->width = pbody->height = radius;
 
 	b->GetUserData().pointer = (uintptr_t)pbody;
-	
+
 	return pbody;
 }
 
@@ -122,7 +125,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 	b2ChainShape shape;
 	b2Vec2* p = new b2Vec2[size / 2];
 
-	for(int i = 0; i < size / 2; ++i)
+	for (int i = 0; i < size / 2; ++i)
 	{
 		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
 		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
@@ -147,83 +150,93 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 // 
 update_status ModulePhysics::PostUpdate()
 {
-	if(IsKeyPressed(KEY_F1))
+	if (IsKeyPressed(KEY_F1))
 		debug = !debug;
 
-	if(!debug)
+	if (!debug)
 		return UPDATE_CONTINUE;
 
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels
-	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())
+	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
 	{
-		for(b2Fixture* f = b->GetFixtureList(); f; f = f->GetNext())
+		for (b2Fixture* f = b->GetFixtureList(); f; f = f->GetNext())
 		{
-			switch(f->GetType())
+			switch (f->GetType())
 			{
 				// Draw circles ------------------------------------------------
-				case b2Shape::e_circle:
+			case b2Shape::e_circle:
+			{
+				b2CircleShape* shape = (b2CircleShape*)f->GetShape();
+				b2Vec2 pos = f->GetBody()->GetPosition();
+
+				DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), (float)METERS_TO_PIXELS(shape->m_radius), Color{ 0, 0, 0, 128 });
+			}
+			break;
+
+			// Draw polygons ------------------------------------------------
+			case b2Shape::e_polygon:
+			{
+				b2PolygonShape* polygonShape = (b2PolygonShape*)f->GetShape();
+				int32 count = polygonShape->m_count;
+				b2Vec2 prev, v;
+
+				for (int32 i = 0; i < count; ++i)
 				{
-					b2CircleShape* shape = (b2CircleShape*)f->GetShape();
-					b2Vec2 pos = f->GetBody()->GetPosition();
-					
-					DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), (float)METERS_TO_PIXELS(shape->m_radius), Color{0, 0, 0, 128});
-				}
-				break;
+					v = b->GetWorldPoint(polygonShape->m_vertices[i]);
+					if (i > 0)
+						DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), RED);
 
-				// Draw polygons ------------------------------------------------
-				case b2Shape::e_polygon:
+					prev = v;
+				}
+
+				v = b->GetWorldPoint(polygonShape->m_vertices[0]);
+				DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), RED);
+			}
+			break;
+
+			// Draw chains contour -------------------------------------------
+			case b2Shape::e_chain:
+			{
+				b2ChainShape* shape = (b2ChainShape*)f->GetShape();
+				b2Vec2 prev, v;
+
+				for (int32 i = 0; i < shape->m_count; ++i)
 				{
-					b2PolygonShape* polygonShape = (b2PolygonShape*)f->GetShape();
-					int32 count = polygonShape->m_count;
-					b2Vec2 prev, v;
-
-					for(int32 i = 0; i < count; ++i)
-					{
-						v = b->GetWorldPoint(polygonShape->m_vertices[i]);
-						if(i > 0)
-							DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), RED);
-
-						prev = v;
-					}
-
-					v = b->GetWorldPoint(polygonShape->m_vertices[0]);
-					DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), RED);
+					v = b->GetWorldPoint(shape->m_vertices[i]);
+					if (i > 0)
+						DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), GREEN);
+					prev = v;
 				}
-				break;
 
-				// Draw chains contour -------------------------------------------
-				case b2Shape::e_chain:
-				{
-					b2ChainShape* shape = (b2ChainShape*)f->GetShape();
-					b2Vec2 prev, v;
+				v = b->GetWorldPoint(shape->m_vertices[0]);
+				DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), GREEN);
+			}
+			break;
 
-					for(int32 i = 0; i < shape->m_count; ++i)
-					{
-						v = b->GetWorldPoint(shape->m_vertices[i]);
-						if(i > 0)
-							DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), GREEN);
-						prev = v;
-					}
+			// Draw a single segment(edge) ----------------------------------
+			case b2Shape::e_edge:
+			{
+				b2EdgeShape* shape = (b2EdgeShape*)f->GetShape();
+				b2Vec2 v1, v2;
 
-					v = b->GetWorldPoint(shape->m_vertices[0]);
-					DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), GREEN);
-				}
-				break;
-
-				// Draw a single segment(edge) ----------------------------------
-				case b2Shape::e_edge:
-				{
-					b2EdgeShape* shape = (b2EdgeShape*)f->GetShape();
-					b2Vec2 v1, v2;
-
-					v1 = b->GetWorldPoint(shape->m_vertex0);
-					v1 = b->GetWorldPoint(shape->m_vertex1);
-					DrawLine(METERS_TO_PIXELS(v1.x), METERS_TO_PIXELS(v1.y), METERS_TO_PIXELS(v2.x), METERS_TO_PIXELS(v2.y), BLUE);
-				}
-				break;
+				v1 = b->GetWorldPoint(shape->m_vertex0);
+				v1 = b->GetWorldPoint(shape->m_vertex1);
+				DrawLine(METERS_TO_PIXELS(v1.x), METERS_TO_PIXELS(v1.y), METERS_TO_PIXELS(v2.x), METERS_TO_PIXELS(v2.y), BLUE);
+			}
+			break;
 			}
 		}
+	}
+
+	//Kicker movement
+	if (IsKeyDown(KEY_DOWN)) {
+		kickerBody->ApplyForceToCenter(b2Vec2(0, kickerForce), true);
+		kickerActivated = true;
+	}
+
+	if (IsKeyReleased(KEY_DOWN)) {
+		kickerActivated = false;
 	}
 
 	return UPDATE_CONTINUE;
@@ -267,7 +280,7 @@ bool PhysBody::Contains(int x, int y) const
 	// TODO 1: Write the code to return true in case the point
 	// is inside ANY of the shapes contained by this body
 	for (b2Fixture* f = body->GetFixtureList(); f; f = f->GetNext()) {
-		if(f->GetShape()->TestPoint(body->GetTransform(), p)) return true;
+		if (f->GetShape()->TestPoint(body->GetTransform(), p)) return true;
 	}
 
 	return false;
@@ -320,4 +333,137 @@ void ModulePhysics::BeginContact(b2Contact* contact) {
 	if (B != nullptr && B->listenerptr != nullptr) {
 		B->listenerptr->OnCollision(B, A);
 	}
+}
+
+void ModulePhysics::CreatePinball() {
+	b2Vec2 pinball[] = {
+	b2Vec2(PIXEL_TO_METERS(0.0869565), PIXEL_TO_METERS(-4.82609)),
+	b2Vec2(PIXEL_TO_METERS(60), PIXEL_TO_METERS(-39.9565)),
+	b2Vec2(PIXEL_TO_METERS(61), PIXEL_TO_METERS(-39.9565)),
+	b2Vec2(PIXEL_TO_METERS(61.0222), PIXEL_TO_METERS(-28.001)),
+	b2Vec2(PIXEL_TO_METERS(75.9844), PIXEL_TO_METERS(-27.9565)),
+	b2Vec2(PIXEL_TO_METERS(75.9556), PIXEL_TO_METERS(-91.8676)),
+	b2Vec2(PIXEL_TO_METERS(72.9556), PIXEL_TO_METERS(-97.9121)),
+	b2Vec2(PIXEL_TO_METERS(69), PIXEL_TO_METERS(-100.957)),
+	b2Vec2(PIXEL_TO_METERS(56.0667), PIXEL_TO_METERS(-102.001)),
+	b2Vec2(PIXEL_TO_METERS(52.0222), PIXEL_TO_METERS(-106.001)),
+	b2Vec2(PIXEL_TO_METERS(52.0222), PIXEL_TO_METERS(-138.334)),
+	b2Vec2(PIXEL_TO_METERS(62.7188), PIXEL_TO_METERS(-150.3)),
+	b2Vec2(PIXEL_TO_METERS(72.875), PIXEL_TO_METERS(-166.863)),
+	b2Vec2(PIXEL_TO_METERS(83.087), PIXEL_TO_METERS(-191.87)),
+	b2Vec2(PIXEL_TO_METERS(87.6364), PIXEL_TO_METERS(-216.957)),
+	b2Vec2(PIXEL_TO_METERS(87.8182), PIXEL_TO_METERS(-232.32)),
+	b2Vec2(PIXEL_TO_METERS(85.9091), PIXEL_TO_METERS(-251.502)),
+	b2Vec2(PIXEL_TO_METERS(80.4545), PIXEL_TO_METERS(-274.866)),
+	b2Vec2(PIXEL_TO_METERS(79.5127), PIXEL_TO_METERS(-287.23)),
+	b2Vec2(PIXEL_TO_METERS(82.9093), PIXEL_TO_METERS(-284.106)),
+	b2Vec2(PIXEL_TO_METERS(89.49), PIXEL_TO_METERS(-268.351)),
+	b2Vec2(PIXEL_TO_METERS(92.6646), PIXEL_TO_METERS(-253.809)),
+	b2Vec2(PIXEL_TO_METERS(94.6366), PIXEL_TO_METERS(-234.155)),
+	b2Vec2(PIXEL_TO_METERS(95.6507), PIXEL_TO_METERS(-215.301)),
+	b2Vec2(PIXEL_TO_METERS(95.8782), PIXEL_TO_METERS(-15.8121)),
+	b2Vec2(PIXEL_TO_METERS(110.063), PIXEL_TO_METERS(-15.9655)),
+	b2Vec2(PIXEL_TO_METERS(109.917), PIXEL_TO_METERS(-234.707)),
+	b2Vec2(PIXEL_TO_METERS(107.219), PIXEL_TO_METERS(-255.205)),
+	b2Vec2(PIXEL_TO_METERS(99.1211), PIXEL_TO_METERS(-278.717)),
+	b2Vec2(PIXEL_TO_METERS(85.2273), PIXEL_TO_METERS(-301.354)),
+	b2Vec2(PIXEL_TO_METERS(59.2841), PIXEL_TO_METERS(-324.559)),
+	b2Vec2(PIXEL_TO_METERS(38), PIXEL_TO_METERS(-337.411)),
+	b2Vec2(PIXEL_TO_METERS(14.5455), PIXEL_TO_METERS(-346.32)),
+	b2Vec2(PIXEL_TO_METERS(-6.36364), PIXEL_TO_METERS(-350.684)),
+	b2Vec2(PIXEL_TO_METERS(-30.7273), PIXEL_TO_METERS(-350.502)),
+	b2Vec2(PIXEL_TO_METERS(-55.4545), PIXEL_TO_METERS(-346.047)),
+	b2Vec2(PIXEL_TO_METERS(-76.0909), PIXEL_TO_METERS(-337.047)),
+	b2Vec2(PIXEL_TO_METERS(-91.8182), PIXEL_TO_METERS(-326.502)),
+	b2Vec2(PIXEL_TO_METERS(-108.545), PIXEL_TO_METERS(-308.411)),
+	b2Vec2(PIXEL_TO_METERS(-119.727), PIXEL_TO_METERS(-287.593)),
+	b2Vec2(PIXEL_TO_METERS(-125.545), PIXEL_TO_METERS(-263.593)),
+	b2Vec2(PIXEL_TO_METERS(-127.182), PIXEL_TO_METERS(-240.411)),
+	b2Vec2(PIXEL_TO_METERS(-128.545), PIXEL_TO_METERS(-240.502)),
+	b2Vec2(PIXEL_TO_METERS(-128.455), PIXEL_TO_METERS(-215.684)),
+	b2Vec2(PIXEL_TO_METERS(-123.273), PIXEL_TO_METERS(-193.502)),
+	b2Vec2(PIXEL_TO_METERS(-116.818), PIXEL_TO_METERS(-174.411)),
+	b2Vec2(PIXEL_TO_METERS(-103.545), PIXEL_TO_METERS(-151.32)),
+	b2Vec2(PIXEL_TO_METERS(-92.3636), PIXEL_TO_METERS(-138.32)),
+	b2Vec2(PIXEL_TO_METERS(-92.6364), PIXEL_TO_METERS(-114.411)),
+	b2Vec2(PIXEL_TO_METERS(-95.5455), PIXEL_TO_METERS(-110.502)),
+	b2Vec2(PIXEL_TO_METERS(-98.7273), PIXEL_TO_METERS(-109.593)),
+	b2Vec2(PIXEL_TO_METERS(-106.636), PIXEL_TO_METERS(-109.411)),
+	b2Vec2(PIXEL_TO_METERS(-111.455), PIXEL_TO_METERS(-107.502)),
+	b2Vec2(PIXEL_TO_METERS(-114.455), PIXEL_TO_METERS(-103.684)),
+	b2Vec2(PIXEL_TO_METERS(-116.364), PIXEL_TO_METERS(-99.5929)),
+	b2Vec2(PIXEL_TO_METERS(-116.455), PIXEL_TO_METERS(-27.4111)),
+	b2Vec2(PIXEL_TO_METERS(-100.727), PIXEL_TO_METERS(-27.5929)),
+	b2Vec2(PIXEL_TO_METERS(-100.636), PIXEL_TO_METERS(-39.5929)),
+	b2Vec2(PIXEL_TO_METERS(-99.4545), PIXEL_TO_METERS(-39.3202)),
+	b2Vec2(PIXEL_TO_METERS(-40.5455), PIXEL_TO_METERS(-4.50198)),
+	b2Vec2(PIXEL_TO_METERS(-41.303), PIXEL_TO_METERS(4.10408)),
+	b2Vec2(PIXEL_TO_METERS(-151.117), PIXEL_TO_METERS(3.07037)),
+	b2Vec2(PIXEL_TO_METERS(-146.792), PIXEL_TO_METERS(-437.79)),
+	b2Vec2(PIXEL_TO_METERS(128.347), PIXEL_TO_METERS(-441.299)),
+	b2Vec2(PIXEL_TO_METERS(126.466), PIXEL_TO_METERS(4.58928)),
+	b2Vec2(PIXEL_TO_METERS(-0.0909091), PIXEL_TO_METERS(3.31621))
+	};
+
+	for (int i = 0; i <= 65; i++)
+		pinball[i].Set(pinball[i].x * 2.0f, pinball[i].y * 2.0f);
+
+
+	b2BodyDef body;
+	body.type = b2_dynamicBody;
+	body.position.Set(PIXEL_TO_METERS((GetScreenWidth() / 2) + 0.5), PIXEL_TO_METERS(GetScreenHeight()) + 0.2);
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2ChainShape chain;
+	chain.CreateLoop(pinball, 66);
+
+	b2FixtureDef fd;
+	fd.shape = &chain;
+	fd.density = 1;
+
+	b->CreateFixture(&fd);
+}
+
+void ModulePhysics::CreateKicker() {
+	float scalekicker = 50.0f;
+	float initialX = 242.0f * SCALE;
+	float initialY = 380.0f * SCALE;
+	float kickerWidth = PIXEL_TO_METERS(10.0f);
+	float kickerHeight = PIXEL_TO_METERS(40.0f);
+
+
+	// Body
+	b2BodyDef springBodyDef;
+	springBodyDef.type = b2_dynamicBody;
+	springBodyDef.position.Set(initialX, initialY);
+	kickerBody = world->CreateBody(&springBodyDef);
+
+	// Shape
+	b2PolygonShape springShape;
+	springShape.SetAsBox(kickerWidth, kickerHeight);
+
+	// Fixture
+	b2FixtureDef springFixtureDef;
+	springFixtureDef.shape = &springShape;
+	springFixtureDef.density = 1.0f;
+	springFixtureDef.friction = 0.5f;
+	kickerBody->CreateFixture(&springFixtureDef);
+
+	// Joint
+	b2BodyDef anchorBodyDef;
+	anchorBodyDef.type = b2_staticBody;
+	anchorBodyDef.position.Set(initialX / scalekicker, (initialY - kickerHeight) / scalekicker);
+	b2Body* anchorBody = world->CreateBody(&anchorBodyDef);
+
+	b2PrismaticJointDef jointDef;
+	jointDef.bodyA = anchorBody;
+	jointDef.bodyB = kickerBody;
+	jointDef.localAnchorA.Set(0, 0);
+	jointDef.localAnchorB.Set(0, 0);
+	jointDef.enableLimit = true;
+	jointDef.lowerTranslation = -50.0f / scalekicker;
+	jointDef.upperTranslation = 0.0f;
+	jointDef.localAxisA.Set(0, 1);
+	world->CreateJoint(&jointDef);
 }

@@ -52,9 +52,17 @@ public:
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
 	void BeginContact(b2Contact* contact) override;
+	void CreatePinball();
+	void CreateKicker();
 
 private:
 
 	bool debug;
 	b2World* world;
+
+	//Kicker
+	b2Body* kickerBody;
+	bool kickerActivated = false;
+	const float kickerForce = -500.0f;
+	
 };
