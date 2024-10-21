@@ -116,89 +116,113 @@ b2Vec2(PIXEL_TO_METERS(126.466), PIXEL_TO_METERS(4.58928)),
 
 
 	b2Vec2 pinball[] = {
-	b2Vec2(140, 423.957),
-	b2Vec2(0.0869565, -4.82609),
-	b2Vec2(60, -39.9565),
-	b2Vec2(61, -39.9565),
-	b2Vec2(61.0222, -28.001),
-	b2Vec2(75.9844, -27.9565),
-	b2Vec2(75.9556, -91.8676),
-	b2Vec2(72.9556, -97.9121),
-	b2Vec2(69, -100.957),
-	b2Vec2(56.0667, -102.001),
-	b2Vec2(52.0222, -106.001),
-	b2Vec2(52.0222, -138.334),
-	b2Vec2(62.7188, -150.3),
-	b2Vec2(72.875, -166.863),
-	b2Vec2(83.087, -191.87),
-	b2Vec2(87.6364, -216.957),
-	b2Vec2(87.8182, -232.32),
-	b2Vec2(85.9091, -251.502),
-	b2Vec2(80.4545, -274.866),
-	b2Vec2(79.3612, -284.272),
-	b2Vec2(81.6919, -284.889),
-	b2Vec2(89.49, -268.351),
-	b2Vec2(92.6646, -253.809),
-	b2Vec2(94.6366, -234.155),
-	b2Vec2(95.6507, -215.301),
-	b2Vec2(95.8782, -15.8121),
-	b2Vec2(110.063, -15.9655),
-	b2Vec2(109.917, -234.707),
-	b2Vec2(107.219, -255.205),
-	b2Vec2(99.1211, -278.717),
-	b2Vec2(85.2273, -301.354),
-	b2Vec2(59.2841, -324.559),
-	b2Vec2(38, -337.411),
-	b2Vec2(14.5455, -346.32),
-	b2Vec2(-6.36364, -350.684),
-	b2Vec2(-30.7273, -350.502),
-	b2Vec2(-55.4545, -346.047),
-	b2Vec2(-76.0909, -337.047),
-	b2Vec2(-91.8182, -326.502),
-	b2Vec2(-108.545, -308.411),
-	b2Vec2(-119.727, -287.593),
-	b2Vec2(-125.545, -263.593),
-	b2Vec2(-127.182, -240.411),
-	b2Vec2(-128.545, -240.502),
-	b2Vec2(-128.455, -215.684),
-	b2Vec2(-123.273, -193.502),
-	b2Vec2(-116.818, -174.411),
-	b2Vec2(-103.545, -151.32),
-	b2Vec2(-92.3636, -138.32),
-	b2Vec2(-92.6364, -114.411),
-	b2Vec2(-95.5455, -110.502),
-	b2Vec2(-98.7273, -109.593),
-	b2Vec2(-106.636, -109.411),
-	b2Vec2(-111.455, -107.502),
-	b2Vec2(-114.455, -103.684),
-	b2Vec2(-116.364, -99.5929),
-	b2Vec2(-116.455, -27.4111),
-	b2Vec2(-100.727, -27.5929),
-	b2Vec2(-100.636, -39.5929),
-	b2Vec2(-99.4545, -39.3202),
-	b2Vec2(-40.5455, -4.50198),
-	b2Vec2(-41.303, 4.10408),
-	b2Vec2(-151.117, 3.07037),
-	b2Vec2(-146.792, -437.79),
-	b2Vec2(128.347, -441.299),
-	b2Vec2(126.466, 4.58928),
-	b2Vec2(-0.0909091, 3.31621),
+		b2Vec2(0, 0),
+		b2Vec2(0, 864),
+		b2Vec2(199.5, 864),
+		b2Vec2(199.5, 838.75),
+		b2Vec2(78.8182, 768.727),
+		b2Vec2(78.8182, 792.727),
+		b2Vec2(47, 792.545),
+		b2Vec2(45.875, 645.75),
+		b2Vec2(52.25, 634.5),
+		b2Vec2(58.875, 629.125),
+		b2Vec2(71.25, 627.125),
+		b2Vec2(87.625, 625.375),
+		b2Vec2(91.75, 621.125),
+		b2Vec2(93.375, 616.75),
+		b2Vec2(93.25, 570.25),
+		b2Vec2(82.5, 560.75),
+		b2Vec2(67, 539.625),
+		b2Vec2(56.875, 522.375),
+		b2Vec2(39, 488.75),
+		b2Vec2(32.125, 469),
+		b2Vec2(25.375, 445.375),
+		b2Vec2(20.25, 409.25),
+		b2Vec2(20.25, 352),
+		b2Vec2(22.75, 330.25),
+		b2Vec2(26.25, 304.25),
+		b2Vec2(32, 278),
+		b2Vec2(38.75, 255),
+		b2Vec2(50.25, 232.5),
+		b2Vec2(61.75, 211.5),
+		b2Vec2(75.75, 194.75),
+		b2Vec2(91.25, 181.25),
+		b2Vec2(106.25, 169),
+		b2Vec2(119.5, 159.5),
+		b2Vec2(137.75, 150.25),
+		b2Vec2(159.25, 141.75),
+		b2Vec2(183.5, 134),
+		b2Vec2(208, 129.75),
+		b2Vec2(276, 129.5),
+		b2Vec2(310, 136.25),
+		b2Vec2(350.75, 152.25),
+		b2Vec2(384.75, 171.25),
+		b2Vec2(410.25, 188.5),
+		b2Vec2(436.25, 212),
+		b2Vec2(459.75, 237),
+		b2Vec2(476.875, 265.375),
+		b2Vec2(489.625, 297.75),
+		b2Vec2(496.375, 326.5),
+		b2Vec2(501.625, 373.875),
+		b2Vec2(502.875, 388),
+		b2Vec2(502.75, 818.5),
+		b2Vec2(470.125, 818.25),
+		b2Vec2(469.875, 417.375),
+		b2Vec2(468, 371.125),
+		b2Vec2(465.75, 354.625),
+		b2Vec2(463.75, 338.875),
+		b2Vec2(461.75, 324.75),
+		b2Vec2(455, 303.5),
+		b2Vec2(444.875, 279.25),
+		b2Vec2(439, 273.25),
+		b2Vec2(439.125, 277.375),
+		b2Vec2(446.875, 300.625),
+		b2Vec2(452.875, 334.625),
+		b2Vec2(454.875, 363),
+		b2Vec2(455, 415.625),
+		b2Vec2(451.25, 441.125),
+		b2Vec2(444.75, 467.625),
+		b2Vec2(436.727, 491.818),
+		b2Vec2(422.909, 519.636),
+		b2Vec2(411.636, 539.455),
+		b2Vec2(399.091, 557.091),
+		b2Vec2(385.091, 571.273),
+		b2Vec2(384.909, 618.909),
+		b2Vec2(386.909, 623.273),
+		b2Vec2(390.727, 627.091),
+		b2Vec2(398.727, 629.091),
+		b2Vec2(412.545, 628.909),
+		b2Vec2(425.455, 634.727),
+		b2Vec2(431.273, 646.727),
+		b2Vec2(432.909, 794.727),
+		b2Vec2(401.091, 794.545),
+		b2Vec2(400.727, 768.909),
+		b2Vec2(398.909, 768.909),
+		b2Vec2(385.273, 778.909),
+		b2Vec2(352.727, 799.273),
+		b2Vec2(334.5, 809.625),
+		b2Vec2(320.75, 817.375),
+		b2Vec2(300.75, 827.25),
+		b2Vec2(284.5, 835.25),
+		b2Vec2(281.375, 838.75),
+		b2Vec2(281.818, 863.455),
+		b2Vec2(512, 864),
+		b2Vec2(512, 0)
 	};
+	CreatePinball(pinball, 91);
 
-	CreatePinball(pinball, 66);
-	/*
 	b2Vec2 pinball2[] = {
-	b2Vec2(PIXEL_TO_METERS(153.813), PIXEL_TO_METERS(396)),
-	b2Vec2(PIXEL_TO_METERS(42.9375), PIXEL_TO_METERS(-29.125)),
-	b2Vec2(PIXEL_TO_METERS(43), PIXEL_TO_METERS(-63.875)),
-	b2Vec2(PIXEL_TO_METERS(39.6875), PIXEL_TO_METERS(-66)),
-	b2Vec2(PIXEL_TO_METERS(36.25), PIXEL_TO_METERS(-62.75)),
-	b2Vec2(PIXEL_TO_METERS(36.1875), PIXEL_TO_METERS(-37.1875)),
-	b2Vec2(PIXEL_TO_METERS(31.25), PIXEL_TO_METERS(-30.125)),
-	b2Vec2(PIXEL_TO_METERS(5.6875), PIXEL_TO_METERS(-6.1875))
+	b2Vec2(298, 780),
+	b2Vec2(74, -47.75),
+	b2Vec2(83.5, -60.75),
+	b2Vec2(83.75, -113),
+	b2Vec2(87.25, -118.5),
+	b2Vec2(91, -118.25),
+	b2Vec2(94.5, -114.75),
+	b2Vec2(94.25, -45.5),
+	b2Vec2(10.75, 11.5)
 	};
-	CreatePinball(pinball2, 7);
-	*/
+	CreatePinball(pinball2, 8);
 	CreateKicker();
 
 	return true;
@@ -491,23 +515,21 @@ void ModulePhysics::BeginContact(b2Contact* contact) {
 
 void ModulePhysics::CreatePinball(b2Vec2* coords, int size) {
 
+	coords[0].Set(PIXEL_TO_METERS(coords[0].x), PIXEL_TO_METERS(coords[0].y));
 	for (int i = 1; i <= size; i++) {
-		coords[i].Set(PIXEL_TO_METERS((coords[i].x + coords[0].x) * 2.0f),
-					PIXEL_TO_METERS((coords[i].y + coords[0].y) * 2.0f));
+		coords[i].Set(PIXEL_TO_METERS((coords[i].x + coords[0].x)),
+			PIXEL_TO_METERS((coords[i].y + coords[0].y)));
 	}
 
-	coords[0] = { PIXEL_TO_METERS(coords[0].x), PIXEL_TO_METERS(coords[0].y) };
+
 
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
-	//body.position.Set(PIXEL_TO_METERS((GetScreenWidth() / 2) + 0.5), PIXEL_TO_METERS(GetScreenHeight()) + 0.2);
-	TraceLog(LOG_INFO, "COORD X: %f, COORD Y: %f", coords[0].x, coords[0].y);
 	body.position.Set(coords[0].x, coords[0].y);
 
 	b2Body* b = world->CreateBody(&body);
 
 	b2ChainShape chain;
-	TraceLog(LOG_INFO, "LENGTH %f", coords->Length());
 	chain.CreateLoop(coords, size + 1);
 
 	b2FixtureDef fd;
