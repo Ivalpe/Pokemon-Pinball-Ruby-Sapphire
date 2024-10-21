@@ -52,7 +52,7 @@ public:
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
 	void BeginContact(b2Contact* contact) override;
-	void CreatePinball();
+	void CreatePinball(b2Vec2* coords, int size);
 	void CreateKicker();
 
 private:

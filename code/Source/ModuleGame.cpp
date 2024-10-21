@@ -35,7 +35,7 @@ class Circle : public PhysicEntity
 {
 public:
 	Circle(ModulePhysics* physics, int _x, int _y, Texture2D _texture)
-		: PhysicEntity(physics->CreateCircle(_x, _y, 16))
+		: PhysicEntity(physics->CreateCircle(_x, _y, 12))
 		, texture(_texture)
 	{
 
@@ -168,6 +168,7 @@ bool ModuleGame::Start()
 	rick = LoadTexture("Assets/rick_head.png");
 
 	background = LoadTexture("Assets/Ruby Table base.png");
+	background_layer = LoadTexture("Assets/Ruby Table base2.png");
 	
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
 
@@ -278,6 +279,8 @@ update_status ModuleGame::Update()
 		}
 	}
 
+	App->renderer->Draw(background_layer, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, &rect);
+
 	// ray -----------------
 	if(ray_on == true)
 	{
@@ -293,7 +296,7 @@ update_status ModuleGame::Update()
 		}
 	}
 
-	TraceLog(LOG_INFO, "%d", entities.size());
+	//TraceLog(LOG_INFO, "%d", entities.size());
 
 	return UPDATE_CONTINUE;
 }
