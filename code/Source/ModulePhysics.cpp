@@ -138,21 +138,17 @@ bool ModulePhysics::Start()
 	b2Vec2(199.5, 864),
 	b2Vec2(0, 864)
 	};
-
 	CreatePinball(pinball, 91);
 
 	b2Vec2 pinball2[] = {
-	b2Vec2(298, 780),
-	b2Vec2(74, -47.75),
-	b2Vec2(83.5, -60.75),
-	b2Vec2(83.75, -113),
-	b2Vec2(87.25, -118.5),
-	b2Vec2(91, -118.25),
-	b2Vec2(94.5, -114.75),
-	b2Vec2(94.25, -45.5),
-	b2Vec2(10.75, 11.5)
+	b2Vec2(133.818,664),
+	b2Vec2(38.9091,52.3636),
+	b2Vec2(40.3636,58.9091),
+	b2Vec2(35.2727,63.2727),
+	b2Vec2(-2,40.7273),
+	b2Vec2(-2.18182,0.909091)
 	};
-	CreatePinball(pinball2, 8);
+	CreatePinball(pinball2, 5);
 	CreateKicker();
 
 	return true;
@@ -323,12 +319,12 @@ update_status ModulePhysics::PostUpdate()
 				{
 					v = b->GetWorldPoint(shape->m_vertices[i]);
 					if (i > 0)
-						DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), GREEN);
+						DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), PURPLE);
 					prev = v;
 				}
 
 				v = b->GetWorldPoint(shape->m_vertices[0]);
-				DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), GREEN);
+				DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), PURPLE);
 			}
 			break;
 
