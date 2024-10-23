@@ -313,37 +313,80 @@ bool ModulePhysics::Start()
 	};
 	CreatePinball(pinball10, 10);
 
-	PhysBody* leftBody1 = CreateRectangle(190, 778, 68, 14);
-	PhysBody* leftBody2 = CreateStaticRectangle(167, 777, 4, 4);
+	//PhysBody* leftBody1 = CreateRectangle(190, 778, 68, 14);
+	//PhysBody* leftBody2 = CreateStaticRectangle(167, 777, 4, 4);
 
-	PhysBody* rightBody1 = CreateRectangle(284, 780, 68, 14);
-	PhysBody* rightBody2 = CreateStaticRectangle(311, 779, 4, 4);
+	//PhysBody* rightBody1 = CreateRectangle(284, 780, 68, 14);
+	//PhysBody* rightBody2 = CreateStaticRectangle(311, 779, 4, 4);
 
 
-	b2RevoluteJointDef jointDef;
-	jointDef.Initialize(leftBody1->body, leftBody2->body, leftBody2->body->GetWorldCenter());
-	jointDef.collideConnected = false;
-	jointDef.enableLimit = true;
-	jointDef.motorSpeed = -15.0f;
-	jointDef.maxMotorTorque = 1000.0f;
-	jointDef.lowerAngle = -0.15f * b2_pi; // -90 degrees
-	jointDef.upperAngle = 0.25f * b2_pi;  //  45 degrees
-	jointDef.enableMotor = true;
+	//b2RevoluteJointDef jointDef;
+	//jointDef.Initialize(leftBody1->body, leftBody2->body, leftBody2->body->GetWorldCenter());
+	//jointDef.collideConnected = false;
+	//jointDef.enableLimit = true;
+	//jointDef.motorSpeed = -15.0f;
+	//jointDef.maxMotorTorque = 1000.0f;
+	//jointDef.lowerAngle = -0.15f * b2_pi; // -90 degrees
+	//jointDef.upperAngle = 0.25f * b2_pi;  //  45 degrees
+	//jointDef.enableMotor = true;
 
-	leftFlipper = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
+	//leftFlipper = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 
-	jointDef.Initialize(rightBody1->body, rightBody2->body, rightBody2->body->GetWorldCenter());
-	jointDef.collideConnected = false;
-	jointDef.enableLimit = true;
-	jointDef.motorSpeed = 15.0f;
-	jointDef.maxMotorTorque = 1000.0f;
-	jointDef.lowerAngle = -0.25f * b2_pi;  //  45 degrees
-	jointDef.upperAngle = 0.15f * b2_pi; // -90 degrees
-	jointDef.enableMotor = true;
+	//jointDef.Initialize(rightBody1->body, rightBody2->body, rightBody2->body->GetWorldCenter());
+	//jointDef.collideConnected = false;
+	//jointDef.enableLimit = true;
+	//jointDef.motorSpeed = 15.0f;
+	//jointDef.maxMotorTorque = 1000.0f;
+	//jointDef.lowerAngle = -0.25f * b2_pi;  //  45 degrees
+	//jointDef.upperAngle = 0.15f * b2_pi; // -90 degrees
+	//jointDef.enableMotor = true;
 
-	rightFlipper = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
+	//rightFlipper = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 
 	return true;
+}
+
+PhysBody* ModulePhysics::createFlipper(bool right) {
+	if (right) {
+		PhysBody* rightBody1 = CreateRectangle(284, 780, 68, 14);
+		PhysBody* rightBody2 = CreateStaticRectangle(311, 779, 4, 4);
+
+		b2RevoluteJointDef jointDef;
+
+		jointDef.Initialize(rightBody1->body, rightBody2->body, rightBody2->body->GetWorldCenter());
+		jointDef.collideConnected = false;
+		jointDef.enableLimit = true;
+		jointDef.motorSpeed = 15.0f;
+		jointDef.maxMotorTorque = 1000.0f;
+		jointDef.lowerAngle = -0.25f * b2_pi;  //  45 degrees
+		jointDef.upperAngle = 0.15f * b2_pi; // -90 degrees
+		jointDef.enableMotor = true;
+
+		rightFlipper = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
+
+		return rightBody1;
+	}
+	else {
+		PhysBody* leftBody1 = CreateRectangle(190, 778, 68, 14);
+		PhysBody* leftBody2 = CreateStaticRectangle(167, 777, 4, 4);
+
+		b2RevoluteJointDef jointDef;
+
+		jointDef.Initialize(leftBody1->body, leftBody2->body, leftBody2->body->GetWorldCenter());
+		jointDef.collideConnected = false;
+		jointDef.enableLimit = true;
+		jointDef.motorSpeed = -15.0f;
+		jointDef.maxMotorTorque = 1000.0f;
+		jointDef.lowerAngle = -0.15f * b2_pi; // -90 degrees
+		jointDef.upperAngle = 0.25f * b2_pi;  //  45 degrees
+		jointDef.enableMotor = true;
+
+		leftFlipper = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
+
+		//PhysBody* pbody = new PhysBody();
+
+		return leftBody1;
+	}
 }
 
 update_status ModulePhysics::PreUpdate()
