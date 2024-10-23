@@ -23,26 +23,11 @@ bool ModulePhysics::Start()
 	LOG("Creating Physics 2D environment");
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
-	// TODO 3: You need to make ModulePhysics class a contact listener
 	world->SetContactListener(this);
 
-	// big static circle as "ground" in the middle of the screen
 	int x = (int)(SCREEN_WIDTH / 2);
 	int y = (int)(SCREEN_HEIGHT / 1.5f);
 	int diameter = SCREEN_WIDTH / 2;
-
-	//b2BodyDef body;
-	//body.type = b2_staticBody;
-	//body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	//b2Body* big_ball = world->CreateBody(&body);
-
-	//b2CircleShape shape;
-	//shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
-
-	//b2FixtureDef fixture;
-	//fixture.shape = &shape;
-	//big_ball->CreateFixture(&fixture);
 
 	b2Vec2 pinball[] = {
 	b2Vec2(0, 0),
@@ -221,16 +206,112 @@ bool ModulePhysics::Start()
 
 	b2Vec2 pinball6[] = {
 	b2Vec2(289.909f, 182.182f),
-	b2Vec2(4.27273f, -3.27273f),  
-	b2Vec2(9.90909f, -3.09091f),  
-	b2Vec2(13.9091f, 0.0909091f), 
-	b2Vec2(13.8182f, 29.7273f),   
-	b2Vec2(11.2727f, 31.5455f),   
-	b2Vec2(2.72727f, 31.4545f),   
-	b2Vec2(0.363636f, 29.8182f)   
+	b2Vec2(4.27273f, -3.27273f),
+	b2Vec2(9.90909f, -3.09091f),
+	b2Vec2(13.9091f, 0.0909091f),
+	b2Vec2(13.8182f, 29.7273f),
+	b2Vec2(11.2727f, 31.5455f),
+	b2Vec2(2.72727f, 31.4545f),
+	b2Vec2(0.363636f, 29.8182f)
 	};
-
 	CreatePinball(pinball6, 7);
+
+	b2Vec2 pinball7[] = {
+	b2Vec2(248.182f, 176.909f),
+	b2Vec2(4.18182f, -4.54545f),
+	b2Vec2(9.27273f, -4.54545f),
+	b2Vec2(13.0909f, -0.0909091f),
+	b2Vec2(13.1818f, 32.3636f),
+	b2Vec2(11.2727f, 33.8182f),
+	b2Vec2(0.272727f, 34.0341f)
+	};
+	CreatePinball(pinball7, 6);
+
+	b2Vec2 pinball8[] = {
+	b2Vec2(151.091f, 374.364f),
+	b2Vec2(-6.36364f, -24.1818f),
+	b2Vec2(-10.1818f, -45.6364f),
+	b2Vec2(-10.1818f, -116.727f),
+	b2Vec2(3.78409f, -149.114f),
+	b2Vec2(15.7841f, -167.364f),
+	b2Vec2(33.9091f, -185.989f),
+	b2Vec2(49.7841f, -193.739f),
+	b2Vec2(67.6591f, -199.364f),
+	b2Vec2(67.6591f, -163.864f),
+	b2Vec2(62.1591f, -156.989f),
+	b2Vec2(62.1591f, -101.989f),
+	b2Vec2(65.9091f, -101.114f),
+	b2Vec2(66.0341f, -87.1136f),
+	b2Vec2(70.0341f, -60.8636f),
+	b2Vec2(88.0341f, -21.8636f),
+	b2Vec2(87.9091f, -5.23864f),
+	b2Vec2(59.9091f, -5.48864f),
+	b2Vec2(51.7841f, -11.6136f),
+	b2Vec2(51.7841f, -43.3636f),
+	b2Vec2(55.9091f, -85.2386f),
+	b2Vec2(57.4091f, -87.6136f),
+	b2Vec2(57.6591f, -103.239f),
+	b2Vec2(47.4091f, -111.864f),
+	b2Vec2(41.4091f, -111.489f),
+	b2Vec2(41.6591f, -120.114f),
+	b2Vec2(7.65909f, -119.614f),
+	b2Vec2(7.90909f, -109.182f),
+	b2Vec2(-7.81818f, -103.0f),
+	b2Vec2(-8.0f, -87.3636f),
+	b2Vec2(-2.09091f, -87.4545f),
+	b2Vec2(0.0909091f, -85.3636f),
+	b2Vec2(-0.0909091f, -63.9091f),
+	b2Vec2(5.90909f, -29.6364f),
+	b2Vec2(9.81818f, -13.0f),
+	b2Vec2(12.0909f, -5.27273f),
+	b2Vec2(10.1818f, -1.27273f)
+	};
+	CreatePinball(pinball8, 36);
+
+	b2Vec2 pinball9[] = {
+	b2Vec2(114.75f, 216.875f),            
+	b2Vec2(0.0f, 3.75f),          
+	b2Vec2(-7.375f, 21.375f),     
+	b2Vec2(-17.25f, 60.875f),     
+	b2Vec2(-17.625f, 110.125f),   
+	b2Vec2(-10.375f, 156.0f),     
+	b2Vec2(-9.25f, 163.25f),      
+	b2Vec2(7.875f, 232.125f),     
+	b2Vec2(20.125f, 260.75f),     
+	b2Vec2(42.25f, 300.5f),       
+	b2Vec2(42.375f, 323.75f),     
+	b2Vec2(20.125f, 340.125f),    
+	b2Vec2(-1.75f, 314.25f),      
+	b2Vec2(-17.875f, 290.0f),     
+	b2Vec2(-30.375f, 266.375f),   
+	b2Vec2(-37.625f, 245.75f),    
+	b2Vec2(-45.75f, 215.5f),      
+	b2Vec2(-49.875f, 192.0f),     
+	b2Vec2(-49.25f, 104.25f),     
+	b2Vec2(-43.75f, 75.875f),     
+	b2Vec2(-37.5f, 51.875f),      
+	b2Vec2(-30.0f, 34.25f),       
+	b2Vec2(-20.0f, 18.125f),      
+	b2Vec2(-11.75f, 8.0f),        
+	b2Vec2(-3.625f, -0.125f)      
+	};
+	CreatePinball(pinball9, 24);
+
+	b2Vec2 pinball10[] = {
+	b2Vec2(86.9091f, 665.0f),     
+	b2Vec2(3.81818f, -4.0f),      
+	b2Vec2(8.09091f, -4.0f),      
+	b2Vec2(12.1818f, 2.0f),       
+	b2Vec2(12.0f, 54.2727f),      
+	b2Vec2(15.6364f, 59.9091f),   
+	b2Vec2(95.6364f, 113.364f),   
+	b2Vec2(95.7273f, 115.909f),   
+	b2Vec2(86.6364f, 126.273f),   
+	b2Vec2(82.2727f, 126.273f),   
+	b2Vec2(-0.272727f, 70.0909f)  
+	};
+	CreatePinball(pinball10, 10);
+
 
 	return true;
 }
@@ -265,7 +346,6 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 
 	b->CreateFixture(&fixture);
 
-	// TODO 4: add a pointer to PhysBody as UserData to the body
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
 	pbody->width = pbody->height = radius;
@@ -351,15 +431,13 @@ update_status ModulePhysics::PostUpdate()
 	if (!debug)
 		return UPDATE_CONTINUE;
 
-	// Bonus code: this will iterate all objects in the world and draw the circles
-	// You need to provide your own macro to translate meters to pixels
 	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
 	{
 		for (b2Fixture* f = b->GetFixtureList(); f; f = f->GetNext())
 		{
 			switch (f->GetType())
 			{
-				// Draw circles ------------------------------------------------
+			// Draw circles ------------------------------------------------
 			case b2Shape::e_circle:
 			{
 				b2CircleShape* shape = (b2CircleShape*)f->GetShape();
@@ -439,13 +517,6 @@ bool ModulePhysics::CleanUp()
 	return true;
 }
 
-//void PhysBody::GetPosition(int& x, int &y) const
-//{
-//	b2Vec2 pos = body->GetPosition();
-//	x = METERS_TO_PIXELS(pos.x) - (width);
-//	y = METERS_TO_PIXELS(pos.y) - (height);
-//}
-
 void PhysBody::GetPhysicPosition(int& x, int& y) const
 {
 	b2Vec2 pos = body->GetPosition();
@@ -462,8 +533,6 @@ bool PhysBody::Contains(int x, int y) const
 {
 	b2Vec2 p(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
-	// TODO 1: Write the code to return true in case the point
-	// is inside ANY of the shapes contained by this body
 	for (b2Fixture* f = body->GetFixtureList(); f; f = f->GetNext()) {
 		if (f->GetShape()->TestPoint(body->GetTransform(), p)) return true;
 	}
@@ -473,9 +542,6 @@ bool PhysBody::Contains(int x, int y) const
 
 int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const
 {
-	// TODO 2: Write code to test a ray cast between both points provided. If not hit return -1
-	// if hit, fill normal_x and normal_y and return the distance between x1,y1 and it's colliding point
-
 	int ret = -1;
 
 	b2Transform transform;
@@ -510,7 +576,6 @@ void ModulePhysics::BeginContact(b2Contact* contact) {
 	PhysBody* A = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData().pointer;
 	PhysBody* B = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData().pointer;
 
-	// TODO 7: Call the listeners that are not NULL
 	if (A != nullptr && A->listenerptr != nullptr) {
 		A->listenerptr->OnCollision(A, B);
 	}

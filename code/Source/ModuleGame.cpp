@@ -88,63 +88,6 @@ private:
 
 };
 
-class Rick : public PhysicEntity
-{
-public:
-	// Pivot 0, 0
-	static constexpr int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-	};
-
-	Rick(ModulePhysics* physics, int _x, int _y, Texture2D _texture)
-		: PhysicEntity(physics->CreateChain(GetMouseX() - 50, GetMouseY() - 100, rick_head, 64))
-		, texture(_texture)
-	{
-
-	}
-
-	void Update() override
-	{
-		int x, y;
-		body->GetPhysicPosition(x, y);
-		DrawTextureEx(texture, Vector2{ (float)x, (float)y }, body->GetRotation() * RAD2DEG, 1.0f, WHITE);
-	}
-
-private:
-	Texture2D texture;
-};
-
 class Spring : public PhysicEntity
 {
 public:
@@ -197,7 +140,8 @@ bool ModuleGame::Start()
 	spring = LoadTexture("Assets/spring.png");
 	entities.emplace_back(new Spring(App->physics, spring));
 
-	// TODO: Homework - create a sensor
+	entities.emplace_back(new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle));
+	entities[(entities.size() - 1)]->setListener(this);
 
 	return ret;
 }
@@ -220,57 +164,10 @@ update_status ModuleGame::Update()
 		ray.y = GetMouseY();
 	}
 
-	if (IsKeyPressed(KEY_ONE))
+	if (IsKeyPressed(KEY_ONE) && App->physics->getDebug())
 	{
-		// TODO 8: Make sure to add yourself as collision callback to the circle you creates
 		entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), circle));
 		entities[(entities.size()-1)]->setListener(this);
-	}
-
-	if (IsKeyPressed(KEY_TWO))
-	{
-		entities.emplace_back(new Box(App->physics, GetMouseX(), GetMouseY(), box));
-	}
-
-	if (IsKeyPressed(KEY_THREE))
-	{
-		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-		};
-
-		entities.emplace_back(new Rick(App->physics, GetMouseX(), GetMouseY(), rick));
 	}
 
 	// Prepare for raycast ------------------------------------------------------
