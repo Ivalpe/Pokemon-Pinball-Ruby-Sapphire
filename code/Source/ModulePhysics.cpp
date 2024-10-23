@@ -141,14 +141,97 @@ bool ModulePhysics::Start()
 	CreatePinball(pinball, 91);
 
 	b2Vec2 pinball2[] = {
-	b2Vec2(133.818,664),
-	b2Vec2(38.9091,52.3636),
-	b2Vec2(40.3636,58.9091),
-	b2Vec2(35.2727,63.2727),
-	b2Vec2(-2,40.7273),
-	b2Vec2(-2.18182,0.909091)
+	b2Vec2(130.5, 664.625),
+	b2Vec2(1.875, -2.125),
+	b2Vec2(6.375, -2.125),
+	b2Vec2(44.5, 52.125),
+	b2Vec2(44.875, 59.0),
+	b2Vec2(40.125, 62.5),
+	b2Vec2(33.0, 62.75),
+	b2Vec2(0.25, 40.5)
 	};
-	CreatePinball(pinball2, 5);
+	CreatePinball(pinball2, 7);
+
+	b2Vec2 pinball3[] = {
+	b2Vec2(349.125f, 664.0f),
+	b2Vec2(-0.25f, 40.5f),
+	b2Vec2(-33.0f, 62.75f),
+	b2Vec2(-40.125f, 62.5f),
+	b2Vec2(-44.875f, 59.0f),
+	b2Vec2(-44.5f, 52.125f),
+	b2Vec2(-6.375f, -2.125f),
+	b2Vec2(-1.875f, -2.125f)
+	};
+	CreatePinball(pinball3, 7);
+
+	b2Vec2 pinball4[] = {
+	b2Vec2(297.5f, 779.5f),
+	b2Vec2(68.0f, -43.25f),
+	b2Vec2(76.25f, -50.5f),
+	b2Vec2(83.0f, -61.5f),
+	b2Vec2(83.5f, -112.25f),
+	b2Vec2(88.0f, -118.75f),
+	b2Vec2(91.5f, -119.0f),
+	b2Vec2(95.25f, -114.0f),
+	b2Vec2(95.75f, -44.0f),
+	b2Vec2(83.0f, -35.25f),
+	b2Vec2(10.0f, 11.25f)
+	};
+	CreatePinball(pinball4, 10);
+
+	b2Vec2 pinball5[] = {
+	b2Vec2(332.364f, 194.182f),
+	b2Vec2(34.0f, 26.5455f),
+	b2Vec2(60.7273f, 58.3636f),
+	b2Vec2(67.2727f, 81.2727f),
+	b2Vec2(84.1818f, 133.091f),
+	b2Vec2(88.3636f, 167.636f),
+	b2Vec2(86.9091f, 216.182f),
+	b2Vec2(74.5455f, 268.182f),
+	b2Vec2(52.9091f, 316.909f),
+	b2Vec2(50.1818f, 317.091f),
+	b2Vec2(50.7273f, 292.727f),
+	b2Vec2(62.9091f, 256.364f),
+	b2Vec2(69.2727f, 232.545f),
+	b2Vec2(74.5455f, 210.909f),
+	b2Vec2(66.5455f, 200.364f),
+	b2Vec2(66.0f, 198.364f),
+	b2Vec2(55.8182f, 198.364f),
+	b2Vec2(48.1818f, 204.545f),
+	b2Vec2(38.1818f, 224.727f),
+	b2Vec2(14.3636f, 261.091f),
+	b2Vec2(14.9091f, 255.636f),
+	b2Vec2(53.0909f, 186.0f),
+	b2Vec2(17.1364f, 168.818f),
+	b2Vec2(-10.6136f, 222.818f),
+	b2Vec2(-10.8636f, 238.568f),
+	b2Vec2(-13.6136f, 238.568f),
+	b2Vec2(-21.8636f, 236.568f),
+	b2Vec2(-23.3636f, 234.818f),
+	b2Vec2(-23.3636f, 212.818f),
+	b2Vec2(-7.61364f, 187.318f),
+	b2Vec2(12.6364f, 146.818f),
+	b2Vec2(34.3864f, 90.8182f),
+	b2Vec2(36.8864f, 87.5682f),
+	b2Vec2(36.3864f, 44.3182f),
+	b2Vec2(17.8864f, 31.0682f),
+	b2Vec2(0.636364f, 21.0682f)
+	};
+	CreatePinball(pinball5, 35);
+
+	b2Vec2 pinball6[] = {
+	b2Vec2(289.909f, 182.182f),
+	b2Vec2(4.27273f, -3.27273f),  
+	b2Vec2(9.90909f, -3.09091f),  
+	b2Vec2(13.9091f, 0.0909091f), 
+	b2Vec2(13.8182f, 29.7273f),   
+	b2Vec2(11.2727f, 31.5455f),   
+	b2Vec2(2.72727f, 31.4545f),   
+	b2Vec2(0.363636f, 29.8182f)   
+	};
+
+	CreatePinball(pinball6, 7);
+
 	CreateKicker();
 
 	return true;
@@ -441,10 +524,10 @@ void ModulePhysics::BeginContact(b2Contact* contact) {
 
 void ModulePhysics::CreatePinball(b2Vec2* coords, int size) {
 
-	coords[0].Set(PIXEL_TO_METERS(coords[0].x), PIXEL_TO_METERS(coords[0].y));
+	coords[0].Set(PIXEL_TO_METERS(coords[0].x / 2.0f), PIXEL_TO_METERS(coords[0].y / 2.0f));
 	for (int i = 1; i <= size; i++) {
-		coords[i].Set(PIXEL_TO_METERS((coords[i].x + coords[0].x)),
-			PIXEL_TO_METERS((coords[i].y + coords[0].y)));
+		coords[i].Set(PIXEL_TO_METERS((coords[i].x) + coords[0].x),
+			PIXEL_TO_METERS((coords[i].y) + coords[0].y));
 	}
 
 
