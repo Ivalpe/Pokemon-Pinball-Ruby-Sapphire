@@ -46,7 +46,7 @@ public:
 
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
+	PhysBody* CreateStaticRectangle(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
 	void BeginContact(b2Contact* contact) override;
 	void CreatePinball(b2Vec2* coords, int size);
@@ -62,6 +62,8 @@ private:
 
 	//Kicker
 	b2Body* kickerBody;
+	b2RevoluteJoint* leftFlipper;
+	b2RevoluteJoint* rightFlipper;
 	bool kickerActivated = false;
 	const float kickerForce = -500.0f;
 	

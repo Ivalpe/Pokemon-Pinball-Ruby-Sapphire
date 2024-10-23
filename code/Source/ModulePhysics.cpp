@@ -150,19 +150,19 @@ bool ModulePhysics::Start()
 	CreatePinball(pinball3, 7);
 
 	b2Vec2 pinball4[] = {
-	b2Vec2(297.5f, 779.5f),
-	b2Vec2(68.0f, -43.25f),
-	b2Vec2(76.25f, -50.5f),
-	b2Vec2(83.0f, -61.5f),
-	b2Vec2(83.5f, -112.25f),
-	b2Vec2(88.0f, -118.75f),
-	b2Vec2(91.5f, -119.0f),
-	b2Vec2(95.25f, -114.0f),
-	b2Vec2(95.75f, -44.0f),
-	b2Vec2(83.0f, -35.25f),
-	b2Vec2(10.0f, 11.25f)
+	b2Vec2(296.25f, 778.563f),
+	b2Vec2(78.375f, -51.4375f),
+	b2Vec2(84.75f, -61.9375f),
+	b2Vec2(84.375f, -111.938f),
+	b2Vec2(88.375f, -117.563f),
+	b2Vec2(92.75f, -117.688f),
+	b2Vec2(96.875f, -113.563f),
+	b2Vec2(96.75f, -43.6875f),
+	b2Vec2(95.625f, -40.4375f),
+	b2Vec2(11.875f, 14.8125f)
 	};
-	CreatePinball(pinball4, 10);
+
+	CreatePinball(pinball4, 9);
 
 	b2Vec2 pinball5[] = {
 	b2Vec2(332.364f, 194.182f),
@@ -225,6 +225,7 @@ bool ModulePhysics::Start()
 	b2Vec2(11.2727f, 33.8182f),
 	b2Vec2(0.272727f, 34.0341f)
 	};
+
 	CreatePinball(pinball7, 6);
 
 	b2Vec2 pinball8[] = {
@@ -269,49 +270,78 @@ bool ModulePhysics::Start()
 	CreatePinball(pinball8, 36);
 
 	b2Vec2 pinball9[] = {
-	b2Vec2(114.75f, 216.875f),            
-	b2Vec2(0.0f, 3.75f),          
-	b2Vec2(-7.375f, 21.375f),     
-	b2Vec2(-17.25f, 60.875f),     
-	b2Vec2(-17.625f, 110.125f),   
-	b2Vec2(-10.375f, 156.0f),     
-	b2Vec2(-9.25f, 163.25f),      
-	b2Vec2(7.875f, 232.125f),     
-	b2Vec2(20.125f, 260.75f),     
-	b2Vec2(42.25f, 300.5f),       
-	b2Vec2(42.375f, 323.75f),     
-	b2Vec2(20.125f, 340.125f),    
-	b2Vec2(-1.75f, 314.25f),      
-	b2Vec2(-17.875f, 290.0f),     
-	b2Vec2(-30.375f, 266.375f),   
-	b2Vec2(-37.625f, 245.75f),    
-	b2Vec2(-45.75f, 215.5f),      
-	b2Vec2(-49.875f, 192.0f),     
-	b2Vec2(-49.25f, 104.25f),     
-	b2Vec2(-43.75f, 75.875f),     
-	b2Vec2(-37.5f, 51.875f),      
-	b2Vec2(-30.0f, 34.25f),       
-	b2Vec2(-20.0f, 18.125f),      
-	b2Vec2(-11.75f, 8.0f),        
-	b2Vec2(-3.625f, -0.125f)      
+	b2Vec2(114.75f, 216.875f),
+	b2Vec2(0.0f, 3.75f),
+	b2Vec2(-7.375f, 21.375f),
+	b2Vec2(-17.25f, 60.875f),
+	b2Vec2(-17.625f, 110.125f),
+	b2Vec2(-10.375f, 156.0f),
+	b2Vec2(-9.25f, 163.25f),
+	b2Vec2(7.875f, 232.125f),
+	b2Vec2(20.125f, 260.75f),
+	b2Vec2(42.25f, 300.5f),
+	b2Vec2(42.375f, 323.75f),
+	b2Vec2(20.125f, 340.125f),
+	b2Vec2(-1.75f, 314.25f),
+	b2Vec2(-17.875f, 290.0f),
+	b2Vec2(-30.375f, 266.375f),
+	b2Vec2(-37.625f, 245.75f),
+	b2Vec2(-45.75f, 215.5f),
+	b2Vec2(-49.875f, 192.0f),
+	b2Vec2(-49.25f, 104.25f),
+	b2Vec2(-43.75f, 75.875f),
+	b2Vec2(-37.5f, 51.875f),
+	b2Vec2(-30.0f, 34.25f),
+	b2Vec2(-20.0f, 18.125f),
+	b2Vec2(-11.75f, 8.0f),
+	b2Vec2(-3.625f, -0.125f)
 	};
 	CreatePinball(pinball9, 24);
 
 	b2Vec2 pinball10[] = {
-	b2Vec2(86.9091f, 665.0f),     
-	b2Vec2(3.81818f, -4.0f),      
-	b2Vec2(8.09091f, -4.0f),      
-	b2Vec2(12.1818f, 2.0f),       
-	b2Vec2(12.0f, 54.2727f),      
-	b2Vec2(15.6364f, 59.9091f),   
-	b2Vec2(95.6364f, 113.364f),   
-	b2Vec2(95.7273f, 115.909f),   
-	b2Vec2(86.6364f, 126.273f),   
-	b2Vec2(82.2727f, 126.273f),   
-	b2Vec2(-0.272727f, 70.0909f)  
+	b2Vec2(86.9091f, 665.0f),
+	b2Vec2(3.81818f, -4.0f),
+	b2Vec2(8.09091f, -4.0f),
+	b2Vec2(12.1818f, 2.0f),
+	b2Vec2(12.0f, 54.2727f),
+	b2Vec2(15.6364f, 59.9091f),
+	b2Vec2(95.6364f, 113.364f),
+	b2Vec2(95.7273f, 115.909f),
+	b2Vec2(86.6364f, 126.273f),
+	b2Vec2(82.2727f, 126.273f),
+	b2Vec2(-0.272727f, 70.0909f)
 	};
 	CreatePinball(pinball10, 10);
 
+	PhysBody* leftBody1 = CreateRectangle(190, 778, 68, 14);
+	PhysBody* leftBody2 = CreateStaticRectangle(167, 777, 4, 4);
+
+	PhysBody* rightBody1 = CreateRectangle(284, 780, 68, 14);
+	PhysBody* rightBody2 = CreateStaticRectangle(311, 779, 4, 4);
+
+
+	b2RevoluteJointDef jointDef;
+	jointDef.Initialize(leftBody1->body, leftBody2->body, leftBody2->body->GetWorldCenter());
+	jointDef.collideConnected = false;
+	jointDef.enableLimit = true;
+	jointDef.motorSpeed = -15.0f;
+	jointDef.maxMotorTorque = 1000.0f;
+	jointDef.lowerAngle = -0.15f * b2_pi; // -90 degrees
+	jointDef.upperAngle = 0.25f * b2_pi;  //  45 degrees
+	jointDef.enableMotor = true;
+
+	leftFlipper = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
+
+	jointDef.Initialize(rightBody1->body, rightBody2->body, rightBody2->body->GetWorldCenter());
+	jointDef.collideConnected = false;
+	jointDef.enableLimit = true;
+	jointDef.motorSpeed = 15.0f;
+	jointDef.maxMotorTorque = 1000.0f;
+	jointDef.lowerAngle = -0.25f * b2_pi;  //  45 degrees
+	jointDef.upperAngle = 0.15f * b2_pi; // -90 degrees
+	jointDef.enableMotor = true;
+
+	rightFlipper = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 
 	return true;
 }
@@ -359,6 +389,31 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	pbody->width = (int)(width * 0.5f);
+	pbody->height = (int)(height * 0.5f);
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateStaticRectangle(int x, int y, int width, int height)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -428,6 +483,23 @@ update_status ModulePhysics::PostUpdate()
 		kickerActivated = false;
 	}
 
+	if (IsKeyDown(KEY_LEFT)) {
+		leftFlipper->SetMotorSpeed(15);
+	}
+
+	if (IsKeyReleased(KEY_LEFT)) {
+		leftFlipper->SetMotorSpeed(-15);
+	}
+
+	if (IsKeyDown(KEY_RIGHT)) {
+		rightFlipper->SetMotorSpeed(-15);
+	}
+
+	if (IsKeyReleased(KEY_RIGHT)) {
+		rightFlipper->SetMotorSpeed(15);
+	}
+
+
 	if (!debug)
 		return UPDATE_CONTINUE;
 
@@ -437,7 +509,7 @@ update_status ModulePhysics::PostUpdate()
 		{
 			switch (f->GetType())
 			{
-			// Draw circles ------------------------------------------------
+				// Draw circles ------------------------------------------------
 			case b2Shape::e_circle:
 			{
 				b2CircleShape* shape = (b2CircleShape*)f->GetShape();
