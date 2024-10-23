@@ -53,7 +53,7 @@ public:
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
 	void BeginContact(b2Contact* contact) override;
 	void CreatePinball(b2Vec2* coords, int size);
-	void CreateKicker();
+	PhysBody* CreateKicker();
 
 private:
 

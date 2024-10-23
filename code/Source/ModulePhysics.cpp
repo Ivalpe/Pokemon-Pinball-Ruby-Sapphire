@@ -232,8 +232,6 @@ bool ModulePhysics::Start()
 
 	CreatePinball(pinball6, 7);
 
-	CreateKicker();
-
 	return true;
 }
 
@@ -548,7 +546,7 @@ void ModulePhysics::CreatePinball(b2Vec2* coords, int size) {
 	b->CreateFixture(&fd);
 }
 
-void ModulePhysics::CreateKicker() {
+PhysBody* ModulePhysics::CreateKicker() {
 	float scalekicker = 50.0f;
 	float initialX = 242.0f * SCALE;
 	float initialY = 380.0f * SCALE;
@@ -589,4 +587,9 @@ void ModulePhysics::CreateKicker() {
 	jointDef.upperTranslation = 0.0f;
 	jointDef.localAxisA.Set(0, 1);
 	world->CreateJoint(&jointDef);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = kickerBody;
+
+	return pbody;
 }

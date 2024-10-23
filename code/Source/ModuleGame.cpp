@@ -145,6 +145,28 @@ private:
 	Texture2D texture;
 };
 
+class Spring : public PhysicEntity
+{
+public:
+
+	Spring(ModulePhysics* physics, Texture2D _texture)
+		: PhysicEntity(physics->CreateKicker())
+		, texture(_texture)
+	{
+
+	}
+
+	void Update() override
+	{
+		int x, y;
+		body->GetPhysicPosition(x, y);
+		DrawTextureEx(texture, Vector2{ (float)x - (texture.width / 2), (float)y - (texture.height / 2) }, body->GetRotation() * RAD2DEG, 1.0f, WHITE);
+	}
+
+private:
+	Texture2D texture;
+};
+
 ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	ray_on = false;
@@ -171,6 +193,9 @@ bool ModuleGame::Start()
 	background_layer = LoadTexture("Assets/Ruby Table base2.png");
 	
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
+
+	spring = LoadTexture("Assets/spring.png");
+	entities.emplace_back(new Spring(App->physics, spring));
 
 	// TODO: Homework - create a sensor
 
