@@ -35,7 +35,7 @@ class Circle : public PhysicEntity
 {
 public:
 	Circle(ModulePhysics* physics, int _x, int _y, Texture2D _texture)
-		: PhysicEntity(physics->CreateCircle(_x, _y, 16))
+		: PhysicEntity(physics->CreateCircle(_x, _y, 12))
 		, texture(_texture)
 	{
 
@@ -46,7 +46,7 @@ public:
 		int x, y;
 		body->GetPhysicPosition(x, y);
 		Vector2 position{ (float)x, (float)y };
-		float scale = 2.0f;
+		float scale = 1.6f;
 		Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
 		Rectangle dest = { position.x , position.y , (float)texture.width * scale , (float)texture.height * scale };
 		Vector2 origin = { ((float)texture.width / (2.0f))*scale, ((float)texture.height / (2.0f))*scale };
@@ -88,47 +88,12 @@ private:
 
 };
 
-class Rick : public PhysicEntity
+class Spring : public PhysicEntity
 {
 public:
-	// Pivot 0, 0
-	static constexpr int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-	};
 
-	Rick(ModulePhysics* physics, int _x, int _y, Texture2D _texture)
-		: PhysicEntity(physics->CreateChain(GetMouseX() - 50, GetMouseY() - 100, rick_head, 64))
+	Spring(ModulePhysics* physics, Texture2D _texture)
+		: PhysicEntity(physics->CreateKicker())
 		, texture(_texture)
 	{
 
@@ -138,7 +103,7 @@ public:
 	{
 		int x, y;
 		body->GetPhysicPosition(x, y);
-		DrawTextureEx(texture, Vector2{ (float)x, (float)y }, body->GetRotation() * RAD2DEG, 1.0f, WHITE);
+		DrawTextureEx(texture, Vector2{ (float)x - (texture.width / 2), (float)y - (texture.height / 2) }, body->GetRotation() * RAD2DEG, 1.0f, WHITE);
 	}
 
 private:
@@ -168,10 +133,15 @@ bool ModuleGame::Start()
 	rick = LoadTexture("Assets/rick_head.png");
 
 	background = LoadTexture("Assets/Ruby Table base.png");
+	background_layer = LoadTexture("Assets/Ruby Table base2.png");
 	
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
 
-	// TODO: Homework - create a sensor
+	spring = LoadTexture("Assets/spring.png");
+	entities.emplace_back(new Spring(App->physics, spring));
+
+	entities.emplace_back(new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle));
+	entities[(entities.size() - 1)]->setListener(this);
 
 	return ret;
 }
@@ -194,57 +164,10 @@ update_status ModuleGame::Update()
 		ray.y = GetMouseY();
 	}
 
-	if (IsKeyPressed(KEY_ONE))
+	if (IsKeyPressed(KEY_ONE) && App->physics->getDebug())
 	{
-		// TODO 8: Make sure to add yourself as collision callback to the circle you creates
 		entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), circle));
 		entities[(entities.size()-1)]->setListener(this);
-	}
-
-	if (IsKeyPressed(KEY_TWO))
-	{
-		entities.emplace_back(new Box(App->physics, GetMouseX(), GetMouseY(), box));
-	}
-
-	if (IsKeyPressed(KEY_THREE))
-	{
-		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-		};
-
-		entities.emplace_back(new Rick(App->physics, GetMouseX(), GetMouseY(), rick));
 	}
 
 	// Prepare for raycast ------------------------------------------------------
@@ -278,6 +201,8 @@ update_status ModuleGame::Update()
 		}
 	}
 
+	App->renderer->Draw(background_layer, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, &rect);
+
 	// ray -----------------
 	if(ray_on == true)
 	{
@@ -292,6 +217,8 @@ update_status ModuleGame::Update()
 			DrawLine((int)(ray.x + destination.x), (int)(ray.y + destination.y), (int)(ray.x + destination.x + normal.x * 25.0f), (int)(ray.y + destination.y + normal.y * 25.0f), Color{ 100, 255, 100, 255 });
 		}
 	}
+
+	//TraceLog(LOG_INFO, "%d", entities.size());
 
 	return UPDATE_CONTINUE;
 }

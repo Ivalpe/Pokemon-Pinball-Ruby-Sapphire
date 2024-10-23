@@ -33,7 +33,10 @@ public:
 	Texture2D circle;
 	Texture2D box;
 	Texture2D rick;
+	Texture2D spring;
 	Texture2D background;
+	Texture2D background_layer;
+
 
 	uint32 bonus_fx;
 

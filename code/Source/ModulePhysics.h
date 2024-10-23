@@ -29,13 +29,10 @@ public:
 public:
 	int width, height;
 	b2Body* body;
-	// TODO 6: Add a pointer to a module that might want to listen to a collision from this body
 	Module* listenerptr = nullptr;
 };
 
 // Module --------------------------------------
-// TODO 3: Make module physics inherit from b2ContactListener
-// then override void BeginContact(b2Contact* contact)
 class ModulePhysics : public Module, b2ContactListener
 {
 public:
@@ -52,9 +49,20 @@ public:
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
 	void BeginContact(b2Contact* contact) override;
+	void CreatePinball(b2Vec2* coords, int size);
+	PhysBody* CreateKicker();
+	bool getDebug() {
+		return debug;
+	}
 
 private:
 
 	bool debug;
 	b2World* world;
+
+	//Kicker
+	b2Body* kickerBody;
+	bool kickerActivated = false;
+	const float kickerForce = -500.0f;
+	
 };
