@@ -26,9 +26,9 @@ public:
 	void setListener(Module* module) {
 		body->listenerptr = module;
 	}
-
-protected:
 	PhysBody* body;
+protected:
+	
 };
 
 class Circle : public PhysicEntity
@@ -150,8 +150,23 @@ ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start
 {
 	ray_on = false;
 	sensed = false;
+	
+	score = 0; // Inicializar el puntaje
+	
 }
+void ModuleGame::DrawScore() {
+	Vector2 position = { 100.0f, 10.0f };
+	float fontSize = 100.0f;
+	float spacing = 1.0f;
+	Color color = BLACK;
 
+	// Crear una cadena que combine "SCORE" y el valor del puntaje
+	char scoreText[20];
+	snprintf(scoreText, sizeof(scoreText), "SCORE: %d", score);
+
+	// Dibujar la cadena en la pantalla
+	App->renderer->DrawText(scoreText, (int)position.x, (int)position.y, GetFontDefault(), (int)spacing, color);
+}
 ModuleGame::~ModuleGame()
 {}
 
@@ -177,12 +192,19 @@ bool ModuleGame::Start()
 	entities.emplace_back(new Spring(App->physics, spring));
 
 	flipper = LoadTexture("Assets/flipper.png");
-	entities.emplace_back(new Flipper(App->physics, flipper, true));
-	entities.emplace_back(new Flipper(App->physics, flipper, false));
+	
+	Flipper* leftFlipper = new Flipper(App->physics, flipper, true);
+	leftFlipper->body->ctype = ColliderType::FLIPPER;
+	entities.emplace_back(leftFlipper);
+	flipper = LoadTexture("Assets/flipper.png");
+	Flipper* rightFlipper = new Flipper(App->physics, flipper, false);
+	rightFlipper->body->ctype = ColliderType::FLIPPER;
+	entities.emplace_back(rightFlipper);
 
 	entities.emplace_back(new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle));
 	entities[(entities.size() - 1)]->setListener(this);
 
+	
 	return ret;
 }
 
@@ -210,6 +232,13 @@ update_status ModuleGame::Update()
 		entities[(entities.size()-1)]->setListener(this);
 	}
 
+	if (IsKeyPressed(KEY_UP))
+	{
+		circle = LoadTexture("Assets/ball.png");
+		entities.emplace_back(new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle));
+		entities[(entities.size() - 1)]->setListener(this);
+		
+	}
 	// Prepare for raycast ------------------------------------------------------
 	
 	vec2i mouse;
@@ -257,7 +286,10 @@ update_status ModuleGame::Update()
 			DrawLine((int)(ray.x + destination.x), (int)(ray.y + destination.y), (int)(ray.x + destination.x + normal.x * 25.0f), (int)(ray.y + destination.y + normal.y * 25.0f), Color{ 100, 255, 100, 255 });
 		}
 	}
+	
 
+	// Llama a la función para dibujar "SCORE" y el puntaje
+	DrawScore();
 	//TraceLog(LOG_INFO, "%d", entities.size());
 
 	return UPDATE_CONTINUE;
@@ -266,5 +298,8 @@ update_status ModuleGame::Update()
 // TODO 8: Now just define collision callback for the circle and play bonus_fx audio
 void ModuleGame::OnCollision(PhysBody* A, PhysBody* B) {
 	TraceLog(LOG_INFO, "yay");
-	App->audio->PlayFx(bonus_fx);
+	if (A->ctype == ColliderType::FLIPPER) {
+		score += 1000; 
+		App->audio->PlayFx(bonus_fx); 
+	}
 }
