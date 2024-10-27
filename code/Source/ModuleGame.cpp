@@ -151,7 +151,7 @@ ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start
 	ray_on = false;
 	sensed = false;
 	
-	score = 0; // Inicializar el puntaje
+	score = -1000; // Inicializar el puntaje
 	
 }
 void ModuleGame::DrawScore() {
