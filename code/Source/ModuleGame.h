@@ -22,7 +22,7 @@ public:
 	update_status Update();
 	bool CleanUp();
 	void OnCollision(PhysBody* A, PhysBody* B) override;
-
+	void DrawScore();
 public:
 
 	std::vector<PhysicEntity*> entities;
@@ -38,10 +38,13 @@ public:
 
 	Texture2D background;
 	Texture2D background_layer;
-
+	
 
 	uint32 bonus_fx;
 
 	vec2<int> ray;
 	bool ray_on;
+private:
+	int score;
 };
+
