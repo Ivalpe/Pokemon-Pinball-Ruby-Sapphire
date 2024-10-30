@@ -26,6 +26,7 @@ public:
 public:
 
 	std::vector<PhysicEntity*> entities;
+	std::vector<PhysicEntity*> obstacles;
 	
 	PhysBody* sensor;
 	bool sensed;
