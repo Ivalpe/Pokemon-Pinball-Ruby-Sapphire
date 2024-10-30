@@ -46,5 +46,8 @@ public:
 	bool ray_on;
 private:
 	int score;
+
+	Music music;
+	float timePlayed = 0.0f;
 };
 

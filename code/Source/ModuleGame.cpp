@@ -178,6 +178,22 @@ bool ModuleGame::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
+	
+
+	//InitAudioDevice();
+
+	music = LoadMusicStream("OST y efectos/Musica/Red Table.mp3");
+
+	if (music.stream.buffer == NULL) // Verifica que se haya cargado correctamente
+	{
+		LOG("Error loading music stream");
+		ret = false;
+	}
+	else
+	{
+		PlayMusicStream(music);
+	}
+
 	circle = LoadTexture("Assets/ball.png"); 
 
 	box = LoadTexture("Assets/crate.png");
@@ -213,12 +229,22 @@ bool ModuleGame::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
+	StopMusicStream(music);
+	UnloadMusicStream(music);
+
+	//CloseAudioDevice();
+
 	return true;
 }
 
 // Update: draw background
 update_status ModuleGame::Update()
 {
+	UpdateMusicStream(music);
+
+	timePlayed = GetMusicTimePlayed(music) / GetMusicTimeLength(music);
+	if (timePlayed > 1.0f) timePlayed = 1.0f;
+
 	if(IsKeyPressed(KEY_SPACE))
 	{
 		ray_on = !ray_on;
