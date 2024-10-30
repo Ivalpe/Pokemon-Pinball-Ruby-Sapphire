@@ -297,9 +297,9 @@ update_status ModuleGame::Update()
 
 // TODO 8: Now just define collision callback for the circle and play bonus_fx audio
 void ModuleGame::OnCollision(PhysBody* A, PhysBody* B) {
-	TraceLog(LOG_INFO, "yay");
 	if (A->ctype == ColliderType::FLIPPER) {
-		score += 1000; 
+		int randomNum = rand() % 9000 + 1000;
+		score += randomNum;
 		App->audio->PlayFx(bonus_fx); 
 	}
 }
