@@ -194,7 +194,7 @@ bool ModuleGame::Start()
 		PlayMusicStream(music);
 	}
 
-	flipper_fx = App->audio->LoadFx("OST y efectos/Sound Effects/flipper.wav");
+	flipper_fx = App->audio->LoadFx("OST y efectos/Sound Effects/flipper.wav");   
 	spring_fx = App->audio->LoadFx("OST y efectos/Sound Effects/spring.wav");
 	bonus_fx = App->audio->LoadFx("OST y efectos/Sound Effects/bonus.wav");
 	circle = LoadTexture("Assets/ball.png"); 
