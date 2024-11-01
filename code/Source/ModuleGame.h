@@ -40,7 +40,7 @@ public:
 	Texture2D background_layer;
 	
 
-	uint32 bonus_fx;
+	
 
 	vec2<int> ray;
 	bool ray_on;
@@ -51,5 +51,6 @@ private:
 	float timePlayed = 0.0f;
 	int flipper_fx;
 	int spring_fx;
+	int bonus_fx;
 };
 

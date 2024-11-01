@@ -196,7 +196,7 @@ bool ModuleGame::Start()
 
 	flipper_fx = App->audio->LoadFx("OST y efectos/Sound Effects/flipper.wav");
 	spring_fx = App->audio->LoadFx("OST y efectos/Sound Effects/spring.wav");
-
+	bonus_fx = App->audio->LoadFx("OST y efectos/Sound Effects/bonus.wav");
 	circle = LoadTexture("Assets/ball.png"); 
 
 	box = LoadTexture("Assets/crate.png");
@@ -205,7 +205,7 @@ bool ModuleGame::Start()
 	background = LoadTexture("Assets/Ruby Table base.png");
 	background_layer = LoadTexture("Assets/Ruby Table base2.png");
 	
-	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
+	
 
 	spring = LoadTexture("Assets/spring.png");
 	entities.emplace_back(new Spring(App->physics, spring));
