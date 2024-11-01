@@ -49,5 +49,7 @@ private:
 
 	Music music;
 	float timePlayed = 0.0f;
+	int flipper_fx;
+	int spring_fx;
 };
 

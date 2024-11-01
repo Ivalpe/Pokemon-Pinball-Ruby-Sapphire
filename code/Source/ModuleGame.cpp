@@ -194,6 +194,9 @@ bool ModuleGame::Start()
 		PlayMusicStream(music);
 	}
 
+	flipper_fx = App->audio->LoadFx("OST y efectos/Sound Effects/flipper.wav");
+	spring_fx = App->audio->LoadFx("OST y efectos/Sound Effects/spring.wav");
+
 	circle = LoadTexture("Assets/ball.png"); 
 
 	box = LoadTexture("Assets/crate.png");
@@ -265,6 +268,19 @@ update_status ModuleGame::Update()
 		entities[(entities.size() - 1)]->setListener(this);
 		
 	}
+	if (IsKeyPressed(KEY_LEFT)) {
+		App->audio->PlayFx(flipper_fx);
+	}
+
+	if (IsKeyPressed(KEY_RIGHT)) {
+		App->audio->PlayFx(flipper_fx);
+	}
+	if (IsKeyPressed(KEY_DOWN))
+	{
+		App->audio->PlayFx(spring_fx);
+
+	}
+
 	// Prepare for raycast ------------------------------------------------------
 	
 	vec2i mouse;
