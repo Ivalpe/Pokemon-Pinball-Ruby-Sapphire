@@ -50,7 +50,11 @@ PhysBody* ModulePhysics::createFlipper(bool right) {
 
 		rightFlipper = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 
-		return rightBody1;
+		PhysBody* pbody = new PhysBody();
+		pbody->body = rightBody1->body;
+		rightBody1->body->GetUserData().pointer = (uintptr_t)pbody;
+
+		return pbody;
 	}
 	else {
 		PhysBody* leftBody1 = CreateRectangle(190, 778, 68, 14);
@@ -68,10 +72,13 @@ PhysBody* ModulePhysics::createFlipper(bool right) {
 		jointDef.enableMotor = true;
 
 		leftFlipper = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
+		PhysBody* pbody = new PhysBody();
+		pbody->body = leftBody1->body;
+		leftBody1->body->GetUserData().pointer = (uintptr_t)pbody;
 
 		//PhysBody* pbody = new PhysBody();
 
-		return leftBody1;
+		return pbody;
 	}
 }
 
@@ -106,6 +113,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	b->CreateFixture(&fixture);
 
 	PhysBody* pbody = new PhysBody();
+	pbody->ctype = ColliderType::BALL;
 	pbody->body = b;
 	pbody->width = pbody->height = radius;
 
@@ -412,6 +420,7 @@ PhysBody* ModulePhysics::CreatePinball(b2Vec2* coords, int size, ColliderType ct
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
+	b->GetUserData().pointer = (uintptr_t)pbody;
 	pbody->ctype = ct;
 	return pbody;
 }
@@ -458,8 +467,11 @@ PhysBody* ModulePhysics::CreateKicker() {
 	jointDef.localAxisA.Set(0, 1);
 	world->CreateJoint(&jointDef);
 
+
 	PhysBody* pbody = new PhysBody();
 	pbody->body = kickerBody;
+
+	kickerBody->GetUserData().pointer = (uintptr_t)pbody;
 
 	return pbody;
 }

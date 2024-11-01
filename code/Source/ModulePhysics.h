@@ -17,6 +17,8 @@
 
 enum ColliderType {
 	FLIPPER,
+	SPRING,
+	BALL,
 	WALL,
 	NORMAL,
 	BOUNCE

@@ -96,7 +96,7 @@ public:
 		: PhysicEntity(physics->CreateKicker())
 		, texture(_texture)
 	{
-
+		body->ctype = ColliderType::SPRING;
 	}
 
 	void Update() override
@@ -212,17 +212,18 @@ bool ModuleGame::Start()
 
 	//FLIPPER
 	Flipper* leftFlipper = new Flipper(App->physics, flipper, true);
-	leftFlipper->body->ctype = ColliderType::WALL;
+	leftFlipper->body->ctype = ColliderType::FLIPPER;
 	entities.emplace_back(leftFlipper);
 	entities[(entities.size() - 1)]->setListener(this);
 
 	Flipper* rightFlipper = new Flipper(App->physics, flipper, false);
-	rightFlipper->body->ctype = ColliderType::WALL;
+	rightFlipper->body->ctype = ColliderType::FLIPPER;
 	entities.emplace_back(rightFlipper);
 	entities[(entities.size() - 1)]->setListener(this);
 
 	//CIRCLE
 	Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
+	ball->body->ctype = ColliderType::BALL;
 	entities.emplace_back(ball);
 	entities[(entities.size() - 1)]->setListener(this);
 
@@ -332,7 +333,7 @@ bool ModuleGame::Start()
 	b2Vec2(33.0, 62.75),
 	b2Vec2(0.25, 40.5)
 	};
-	obstacles.emplace_back(new CollisionChain(App->physics, pinball2, 7, ColliderType::WALL));
+	obstacles.emplace_back(new CollisionChain(App->physics, pinball2, 7, ColliderType::BOUNCE));
 
 	b2Vec2 pinball3[] = {
 	b2Vec2(349.125f, 664.0f),
@@ -344,7 +345,7 @@ bool ModuleGame::Start()
 	b2Vec2(-6.375f, -2.125f),
 	b2Vec2(-1.875f, -2.125f)
 	};
-	obstacles.emplace_back(new CollisionChain(App->physics, pinball3, 7, ColliderType::WALL));
+	obstacles.emplace_back(new CollisionChain(App->physics, pinball3, 7, ColliderType::BOUNCE));
 
 	b2Vec2 pinball4[] = {
 	b2Vec2(296.25f, 778.563f),
@@ -358,7 +359,7 @@ bool ModuleGame::Start()
 	b2Vec2(95.625f, -40.4375f),
 	b2Vec2(11.875f, 14.8125f)
 	};
-	obstacles.emplace_back(new CollisionChain(App->physics, pinball4, 9, ColliderType::WALL));
+	obstacles.emplace_back(new CollisionChain(App->physics, pinball4, 9, ColliderType::NORMAL));
 
 	b2Vec2 pinball5[] = {
 	b2Vec2(332.364f, 194.182f),
@@ -398,7 +399,7 @@ bool ModuleGame::Start()
 	b2Vec2(17.8864f, 31.0682f),
 	b2Vec2(0.636364f, 21.0682f)
 	};
-	obstacles.emplace_back(new CollisionChain(App->physics, pinball5, 35, ColliderType::WALL));
+	obstacles.emplace_back(new CollisionChain(App->physics, pinball5, 35, ColliderType::NORMAL));
 
 	b2Vec2 pinball6[] = {
 	b2Vec2(289.909f, 182.182f),
@@ -410,7 +411,7 @@ bool ModuleGame::Start()
 	b2Vec2(2.72727f, 31.4545f),
 	b2Vec2(0.363636f, 29.8182f)
 	};
-	obstacles.emplace_back(new CollisionChain(App->physics, pinball6, 7, ColliderType::WALL));
+	obstacles.emplace_back(new CollisionChain(App->physics, pinball6, 7, ColliderType::NORMAL));
 
 	b2Vec2 pinball7[] = {
 	b2Vec2(248.182f, 176.909f),
@@ -421,7 +422,7 @@ bool ModuleGame::Start()
 	b2Vec2(11.2727f, 33.8182f),
 	b2Vec2(0.272727f, 34.0341f)
 	};
-	obstacles.emplace_back(new CollisionChain(App->physics, pinball7, 6, ColliderType::WALL));
+	obstacles.emplace_back(new CollisionChain(App->physics, pinball7, 6, ColliderType::NORMAL));
 
 	b2Vec2 pinball8[] = {
 	b2Vec2(151.091f, 374.364f),
@@ -462,7 +463,7 @@ bool ModuleGame::Start()
 	b2Vec2(12.0909f, -5.27273f),
 	b2Vec2(10.1818f, -1.27273f)
 	};
-	obstacles.emplace_back(new CollisionChain(App->physics, pinball8, 36, ColliderType::WALL));
+	obstacles.emplace_back(new CollisionChain(App->physics, pinball8, 36, ColliderType::NORMAL));
 
 	b2Vec2 pinball9[] = {
 	b2Vec2(114.75f, 216.875f),
@@ -491,7 +492,7 @@ bool ModuleGame::Start()
 	b2Vec2(-11.75f, 8.0f),
 	b2Vec2(-3.625f, -0.125f)
 	};
-	obstacles.emplace_back(new CollisionChain(App->physics, pinball9, 24, ColliderType::WALL));
+	obstacles.emplace_back(new CollisionChain(App->physics, pinball9, 24, ColliderType::NORMAL));
 
 	b2Vec2 pinball10[] = {
 	b2Vec2(86.9091f, 665.0f),
@@ -506,12 +507,9 @@ bool ModuleGame::Start()
 	b2Vec2(82.2727f, 126.273f),
 	b2Vec2(-0.272727f, 70.0909f)
 	};
-	obstacles.emplace_back(new CollisionChain(App->physics, pinball10, 10, ColliderType::WALL));
+	obstacles.emplace_back(new CollisionChain(App->physics, pinball10, 10, ColliderType::NORMAL));
 
-	for (auto i : obstacles) {
-		i->body->ctype = ColliderType::WALL;
-		i->setListener(this);
-	}
+	for (auto i : obstacles) i->setListener(this);
 	
 	return ret;
 }
@@ -605,6 +603,7 @@ update_status ModuleGame::Update()
 
 // TODO 8: Now just define collision callback for the circle and play bonus_fx audio
 void ModuleGame::OnCollision(PhysBody* A, PhysBody* B) {
+	int randomNum;
 	switch (A->ctype)
 	{
 	case ColliderType::FLIPPER:
@@ -612,12 +611,19 @@ void ModuleGame::OnCollision(PhysBody* A, PhysBody* B) {
 		break;
 	case ColliderType::BOUNCE:
 		TraceLog(LOG_INFO, "BOUNCE");
+		randomNum = rand() % 9000 + 1000;
+		score += randomNum;
 		break;
 	case ColliderType::NORMAL:
 		TraceLog(LOG_INFO, "NORMAL");
+		randomNum = rand() % 4000 + 1000;
+		score += randomNum;
 		break;
 	case ColliderType::WALL:
 		TraceLog(LOG_INFO, "WALL");
+		break;
+	case ColliderType::SPRING:
+		TraceLog(LOG_INFO, "SPRING");
 		break;
 	default:
 		break;
