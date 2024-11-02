@@ -35,7 +35,7 @@ public:
 	Texture2D rick;
 	Texture2D spring;
 	Texture2D flipper;
-
+	Texture2D bumper;
 	Texture2D background;
 	Texture2D background_layer;
 	
