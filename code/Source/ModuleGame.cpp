@@ -11,11 +11,13 @@ protected:
 
 	PhysicEntity(PhysBody* _body)
 		: body(_body)
-	{
-
+	{		
 	}
 
 public:
+	
+
+	
 	virtual ~PhysicEntity() = default;
 	virtual void Update() = 0;
 
@@ -34,29 +36,36 @@ protected:
 class Circle : public PhysicEntity
 {
 public:
-	Circle(ModulePhysics* physics, int _x, int _y, Texture2D _texture)
-		: PhysicEntity(physics->CreateCircle(_x, _y, 12))
-		, texture(_texture)
-	{
+	float vx, vy; // Velocidades en los ejes x e y
 
+	Circle(ModulePhysics* physics, int _x, int _y, Texture2D _texture)
+		: PhysicEntity(physics->CreateCircle(_x, _y, 12)), texture(_texture)
+	{
+		vx = 2.0f; // Velocidad inicial en x
+		vy = -3.0f; // Velocidad inicial en y
 	}
 
 	void Update() override
 	{
+		// Actualizar la posición de la pelota según su velocidad
 		int x, y;
 		body->GetPhysicPosition(x, y);
+		x += (int)vx;
+		y += (int)vy;
+		 // Actualiza la posición física
+
+		// Dibujar la textura de la pelota
 		Vector2 position{ (float)x, (float)y };
 		float scale = 1.6f;
 		Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
 		Rectangle dest = { position.x , position.y , (float)texture.width * scale , (float)texture.height * scale };
-		Vector2 origin = { ((float)texture.width / (2.0f))*scale, ((float)texture.height / (2.0f))*scale };
+		Vector2 origin = { ((float)texture.width / (2.0f)) * scale, ((float)texture.height / (2.0f)) * scale };
 		float rotation = body->GetRotation() * RAD2DEG;
 		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
 	}
 
 private:
 	Texture2D texture;
-
 };
 
 class Box : public PhysicEntity
@@ -145,13 +154,40 @@ private:
 	Texture2D texture;
 	bool right;
 };
+class Bumper : public PhysicEntity
+{
+public:
+	Bumper(ModulePhysics* physics, int _x, int _y, Texture2D _texture)
+		: PhysicEntity(physics->CreateStaticCircle(_x, _y, 21))
+		, texture(_texture)
+	{
+
+	}
+
+	void Update() override
+	{
+		int x, y;
+		body->GetPhysicPosition(x, y);
+		Vector2 position{ (float)x, (float)y };
+		float scale = 1.6f;
+		Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
+		Rectangle dest = { position.x , position.y , (float)texture.width * scale , (float)texture.height * scale };
+		Vector2 origin = { ((float)texture.width / (2.0f)) * scale, ((float)texture.height / (2.0f)) * scale };
+		float rotation = body->GetRotation() * RAD2DEG;
+		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
+	}
+
+private:
+	Texture2D texture;
+
+};
 
 ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	ray_on = false;
 	sensed = false;
 	
-	score = -1000; // Inicializar el puntaje
+	score = 0; // Inicializar el puntaje
 	
 }
 void ModuleGame::DrawScore() {
@@ -161,7 +197,7 @@ void ModuleGame::DrawScore() {
 	Color color = BLACK;
 
 	// Crear una cadena que combine "SCORE" y el valor del puntaje
-	char scoreText[20];
+	char scoreText[50];
 	snprintf(scoreText, sizeof(scoreText), "SCORE: %d", score);
 
 	// Dibujar la cadena en la pantalla
@@ -197,7 +233,22 @@ bool ModuleGame::Start()
 	flipper_fx = App->audio->LoadFx("OST y efectos/Sound Effects/flipper.wav");   
 	spring_fx = App->audio->LoadFx("OST y efectos/Sound Effects/spring.wav");
 	bonus_fx = App->audio->LoadFx("OST y efectos/Sound Effects/bonus.wav");
-	circle = LoadTexture("Assets/ball.png"); 
+
+	circle = LoadTexture("Assets/ball.png");
+
+	bumper = LoadTexture("Assets/bumper.png");
+	Bumper* Bumper1 = (new Bumper(App->physics, 260.f, 280.f , bumper));
+	entities.emplace_back(Bumper1);
+	Bumper1->setListener(this);
+	Bumper1->body->ctype = ColliderType::BUMPER;
+	Bumper* Bumper2 = (new Bumper(App->physics, 330.f, 260.f, bumper));
+	entities.emplace_back(Bumper2);
+	Bumper2->setListener(this);
+	Bumper2->body->ctype = ColliderType::BUMPER;
+	Bumper* Bumper3 = new Bumper(App->physics, 300, 320, bumper);
+	entities.emplace_back(Bumper3); 
+	Bumper3->setListener(this);
+	Bumper3->body->ctype = ColliderType::BUMPER;
 
 	box = LoadTexture("Assets/crate.png");
 	rick = LoadTexture("Assets/rick_head.png");
@@ -220,7 +271,7 @@ bool ModuleGame::Start()
 	rightFlipper->body->ctype = ColliderType::FLIPPER;
 	entities.emplace_back(rightFlipper);
 
-	entities.emplace_back(new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle));
+	entities.emplace_back(new Circle(App->physics, 242.0f * SCALE, 350.0f * SCALE, circle));
 	entities[(entities.size() - 1)]->setListener(this);
 
 	
@@ -259,12 +310,13 @@ update_status ModuleGame::Update()
 	{
 		entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), circle));
 		entities[(entities.size()-1)]->setListener(this);
+		int score = -1000;
 	}
 
 	if (IsKeyPressed(KEY_UP))
 	{
 		circle = LoadTexture("Assets/ball.png");
-		entities.emplace_back(new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle));
+		entities.emplace_back(new Circle(App->physics, 242.0f * SCALE, 350.0f * SCALE, circle));
 		entities[(entities.size() - 1)]->setListener(this);
 		
 	}
@@ -338,10 +390,12 @@ update_status ModuleGame::Update()
 }
 
 // TODO 8: Now just define collision callback for the circle and play bonus_fx audio
-void ModuleGame::OnCollision(PhysBody* A, PhysBody* B) {
-	if (A->ctype == ColliderType::FLIPPER) {
-		int randomNum = rand() % 9000 + 1000;
-		score += randomNum;
-		App->audio->PlayFx(bonus_fx); 
+void ModuleGame::OnCollision(PhysBody* A, PhysBody* B)
+{
+	if (A->ctype == ColliderType::BUMPER) {
+	
+			score += 200;
+			App->audio->PlayFx(bonus_fx);
+		
 	}
 }
