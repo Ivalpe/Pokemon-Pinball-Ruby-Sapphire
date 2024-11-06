@@ -554,6 +554,12 @@ bool ModuleGame::Start()
 bool ModuleGame::CleanUp()
 {
 	LOG("Unloading Intro scene");
+	UnloadTexture(circle);
+	UnloadTexture(spring);
+	UnloadTexture(bouncetx);
+	UnloadTexture(background);
+	UnloadTexture(background_layer);
+	UnloadTexture(flipper);
 
 	return true;
 }
