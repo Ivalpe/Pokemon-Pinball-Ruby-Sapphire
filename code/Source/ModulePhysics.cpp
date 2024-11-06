@@ -415,6 +415,7 @@ PhysBody* ModulePhysics::CreatePinball(b2Vec2* coords, int size, ColliderType ct
 	b2FixtureDef fd;
 	fd.shape = &chain;
 	fd.density = 1;
+	if (ct == ColliderType::BOUNCE) fd.restitution = 1.0f;
 
 	b->CreateFixture(&fd);
 
