@@ -59,6 +59,34 @@ private:
 
 };
 
+class CollisionCircle : public PhysicEntity
+{
+public:
+	CollisionCircle(ModulePhysics* physics, int _x, int _y, Texture2D _texture)
+		: PhysicEntity(physics->CreateCollisionCircle(_x, _y, 12))
+		, texture(_texture)
+	{
+
+	}
+
+	void Update() override
+	{
+		int x, y;
+		body->GetPhysicPosition(x, y);
+		Vector2 position{ (float)x, (float)y };
+		float scale = 1.6f;
+		Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
+		Rectangle dest = { position.x , position.y , (float)texture.width * scale , (float)texture.height * scale };
+		Vector2 origin = { ((float)texture.width / (2.0f)) * scale, ((float)texture.height / (2.0f)) * scale };
+		float rotation = body->GetRotation() * RAD2DEG;
+		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
+	}
+
+private:
+	Texture2D texture;
+
+};
+
 class Box : public PhysicEntity
 {
 public:
@@ -193,6 +221,7 @@ bool ModuleGame::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	circle = LoadTexture("Assets/ball.png"); 
+	bouncetx = LoadTexture("Assets/bounce.png");
 
 	box = LoadTexture("Assets/crate.png");
 	rick = LoadTexture("Assets/rick_head.png");
@@ -204,6 +233,14 @@ bool ModuleGame::Start()
 
 
 	flipper = LoadTexture("Assets/flipper.png");
+
+	//COLLISIONS BOUNCE
+	entities.emplace_back(new CollisionCircle(App->physics, 258, 266, bouncetx));
+	entities[(entities.size() - 1)]->setListener(this);
+	entities.emplace_back(new CollisionCircle(App->physics, 324, 282, bouncetx));
+	entities[(entities.size() - 1)]->setListener(this);
+	entities.emplace_back(new CollisionCircle(App->physics, 283, 338, bouncetx));
+	entities[(entities.size() - 1)]->setListener(this);
 
 	//SPRING
 	spring = LoadTexture("Assets/spring.png");
@@ -534,6 +571,7 @@ update_status ModuleGame::Update()
 	if (IsKeyPressed(KEY_ONE) && App->physics->getDebug())
 	{
 		entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), circle));
+		TraceLog(LOG_INFO, "%d, %d", GetMouseX(), GetMouseY());
 		entities[(entities.size()-1)]->setListener(this);
 	}
 
