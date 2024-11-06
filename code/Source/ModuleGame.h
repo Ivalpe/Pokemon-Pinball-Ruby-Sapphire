@@ -40,6 +40,7 @@ public:
 
 	Texture2D background;
 	Texture2D background_layer;
+	Texture2D end;
 	
 
 	uint32 bonus_fx;
@@ -48,5 +49,10 @@ public:
 	bool ray_on;
 private:
 	int score;
+	int highscore;
+	int previousscore;
+	bool extraBall = true;
+	int lifes;
+	bool endRun;
 };
 

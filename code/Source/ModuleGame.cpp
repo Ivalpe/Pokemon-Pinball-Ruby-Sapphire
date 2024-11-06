@@ -28,7 +28,7 @@ public:
 	}
 	PhysBody* body;
 protected:
-	
+
 };
 
 class Circle : public PhysicEntity
@@ -49,13 +49,16 @@ public:
 		float scale = 1.6f;
 		Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
 		Rectangle dest = { position.x , position.y , (float)texture.width * scale , (float)texture.height * scale };
-		Vector2 origin = { ((float)texture.width / (2.0f))*scale, ((float)texture.height / (2.0f))*scale };
+		Rectangle sourceEnd = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
+		Rectangle destEnd = { position.x , position.y , (float)texture.width * scale , (float)texture.height * scale };
+		Vector2 origin = { ((float)texture.width / (2.0f)) * scale, ((float)texture.height / (2.0f)) * scale };
 		float rotation = body->GetRotation() * RAD2DEG;
 		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
 	}
 
 private:
 	Texture2D texture;
+
 
 };
 
@@ -156,12 +159,12 @@ public:
 		Vector2 position{ (float)x, (float)y };
 		float scale = 1.6f;
 		Rectangle source;
-		if(right){ 
-			source = { 0.0f, 0.0f, -(float)texture.width, (float)texture.height }; 
+		if (right) {
+			source = { 0.0f, 0.0f, -(float)texture.width, (float)texture.height };
 		}
 		else {
 			source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
-			
+
 		}
 		Rectangle dest = { position.x , position.y , (float)texture.width * scale , (float)texture.height * scale };
 		Vector2 origin = { ((float)texture.width / (2.0f)) * scale, ((float)texture.height / (2.0f)) * scale };
@@ -192,22 +195,34 @@ ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start
 {
 	ray_on = false;
 	sensed = false;
-	
-	score = -1000; // Inicializar el puntaje
-	
+	endRun = false;
+
+	lifes = 3;
+	score = 0;
+
 }
 void ModuleGame::DrawScore() {
 	Vector2 position = { 100.0f, 10.0f };
-	float fontSize = 100.0f;
 	float spacing = 1.0f;
 	Color color = BLACK;
 
-	// Crear una cadena que combine "SCORE" y el valor del puntaje
 	char scoreText[20];
+	char highscoreText[20];
+	char previousText[20];
+	char lifesText[20];
 	snprintf(scoreText, sizeof(scoreText), "SCORE: %d", score);
+	snprintf(highscoreText, sizeof(highscoreText), "HIGHSCORE: %d", highscore);
+	snprintf(previousText, sizeof(previousText), "PREVIOUS: %d", previousscore);
+	snprintf(lifesText, sizeof(lifesText), "LIFES: %d", lifes);
 
-	// Dibujar la cadena en la pantalla
-	App->renderer->DrawText(scoreText, (int)position.x, (int)position.y, GetFontDefault(), (int)spacing, color);
+	App->renderer->DrawText(scoreText, (int)position.x + 20, (int)position.y + 2, GetFontDefault(), (int)spacing, color);
+	App->renderer->DrawText(highscoreText, (int)position.x + 20, (int)position.y + 12, GetFontDefault(), (int)spacing, color);
+	App->renderer->DrawText(previousText, (int)position.x + 20, (int)position.y + 22, GetFontDefault(), (int)spacing, color);
+	App->renderer->DrawText(lifesText, (int)position.x + 250, (int)position.y + 2, GetFontDefault(), (int)spacing, color);
+
+	if (endRun) {
+		DrawText(TextFormat(scoreText), (int)(SCREEN_WIDTH / 2) * SCALE - 90, (int)(SCREEN_HEIGHT / 2) * SCALE - 160, 20, color);
+	}
 }
 ModuleGame::~ModuleGame()
 {}
@@ -220,15 +235,20 @@ bool ModuleGame::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
+<<<<<<< Updated upstream
 	circle = LoadTexture("Assets/ball.png"); 
 	bouncetx = LoadTexture("Assets/bounce.png");
+=======
+	circle = LoadTexture("Assets/ball.png");
+>>>>>>> Stashed changes
 
 	box = LoadTexture("Assets/crate.png");
 	rick = LoadTexture("Assets/rick_head.png");
 
 	background = LoadTexture("Assets/Ruby Table base.png");
 	background_layer = LoadTexture("Assets/Ruby Table base2.png");
-	
+	end = LoadTexture("Assets/End.png");
+
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
 
 
@@ -546,7 +566,7 @@ bool ModuleGame::Start()
 	obstacles.emplace_back(new CollisionChain(App->physics, pinball10, 10, ColliderType::NORMAL));
 
 	for (auto i : obstacles) i->setListener(this);
-	
+
 	return ret;
 }
 
@@ -567,7 +587,7 @@ bool ModuleGame::CleanUp()
 // Update: draw background
 update_status ModuleGame::Update()
 {
-	if(IsKeyPressed(KEY_SPACE))
+	if (IsKeyPressed(KEY_SPACE))
 	{
 		ray_on = !ray_on;
 		ray.x = GetMouseX();
@@ -577,6 +597,7 @@ update_status ModuleGame::Update()
 	if (IsKeyPressed(KEY_ONE) && App->physics->getDebug())
 	{
 		entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), circle));
+<<<<<<< Updated upstream
 		TraceLog(LOG_INFO, "%d, %d", GetMouseX(), GetMouseY());
 		entities[(entities.size()-1)]->setListener(this);
 	}
@@ -585,21 +606,28 @@ update_status ModuleGame::Update()
 	{
 		circle = LoadTexture("Assets/ball.png");
 		entities.emplace_back(new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle));
+=======
+>>>>>>> Stashed changes
 		entities[(entities.size() - 1)]->setListener(this);
-		
+		TraceLog(LOG_INFO, "%d | %d ", GetMouseX(), GetMouseY());
 	}
 	if (IsKeyPressed(KEY_R))
 	{
-		for (int i = 0; i < entities.size() ;i++){
-			if (entities[i]->body->ctype == ColliderType::BALL){
+		for (int i = 0; i < entities.size(); i++) {
+			if (entities[i]->body->ctype == ColliderType::BALL) {
 				entities.erase(entities.begin() + i);
+				i--;
 				TraceLog(LOG_INFO, "BOLA ELIMINADA");
 			}
-				
+
 		}
 		Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
 		entities.emplace_back(ball);
 		entities[(entities.size() - 1)]->setListener(this);
+		previousscore = score;
+		if (score >= highscore)
+			highscore = score;
+
 		score = 0;
 	}
 
@@ -607,18 +635,31 @@ update_status ModuleGame::Update()
 	for (int i = 0; i < entities.size(); i++) {
 		if (entities[i]->body->ctype == ColliderType::BALL) {
 			entities[i]->body->GetPhysicPosition(x, y);
-			if (y >= SCREEN_HEIGHT * SCALE){
+			if (y >= SCREEN_HEIGHT * SCALE) {
 				entities.erase(entities.begin() + i);
 				TraceLog(LOG_INFO, "ADIOS BOLA ;)");
 				Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
 				entities.emplace_back(ball);
 				entities[(entities.size() - 1)]->setListener(this);
+				lifes--;
 			}
+			if (x >= 162 && x <= 184 && y <= 283 && y >= 280 && extraBall) {
+				Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
+				entities.emplace_back(ball);
+				entities[(entities.size() - 1)]->setListener(this);
+				extraBall = false;
+				lifes++;
+			}
+
 		}
 	}
 
+	if (lifes <= 0) {
+		endRun = true;
+	}
+
 	// Prepare for raycast ------------------------------------------------------
-	
+
 	vec2i mouse;
 	mouse.x = GetMouseX();
 	mouse.y = GetMouseY();
@@ -633,7 +674,8 @@ update_status ModuleGame::Update()
 	rect.y = 208;
 	rect.width = SCREEN_WIDTH;
 	rect.height = SCREEN_HEIGHT;
-	App->renderer->Draw(background, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, &rect);
+	App->renderer->Draw(background, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, &rect);
+
 
 	for (PhysicEntity* entity : entities)
 	{
@@ -650,10 +692,13 @@ update_status ModuleGame::Update()
 
 	App->renderer->Draw(background_layer, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, &rect);
 
+	if (endRun)
+		App->renderer->Draw(end, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, &rect);
+
 	// ray -----------------
-	if(ray_on == true)
+	if (ray_on == true)
 	{
-		vec2f destination((float)(mouse.x-ray.x), (float)(mouse.y-ray.y));
+		vec2f destination((float)(mouse.x - ray.x), (float)(mouse.y - ray.y));
 		destination.Normalize();
 		destination *= (float)ray_hit;
 
@@ -664,7 +709,7 @@ update_status ModuleGame::Update()
 			DrawLine((int)(ray.x + destination.x), (int)(ray.y + destination.y), (int)(ray.x + destination.x + normal.x * 25.0f), (int)(ray.y + destination.y + normal.y * 25.0f), Color{ 100, 255, 100, 255 });
 		}
 	}
-	
+
 
 	// Llama a la función para dibujar "SCORE" y el puntaje
 	DrawScore();
@@ -704,7 +749,7 @@ void ModuleGame::OnCollision(PhysBody* A, PhysBody* B) {
 	if (A->ctype == ColliderType::FLIPPER) {
 		int randomNum = rand() % 9000 + 1000;
 		score += randomNum;
-		App->audio->PlayFx(bonus_fx); 
+		App->audio->PlayFx(bonus_fx);
 	}
 	*/
 }
