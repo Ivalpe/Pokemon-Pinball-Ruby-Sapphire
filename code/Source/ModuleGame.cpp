@@ -223,7 +223,6 @@ bool ModuleGame::Start()
 
 	//CIRCLE
 	Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
-	ball->body->ctype = ColliderType::BALL;
 	entities.emplace_back(ball);
 	entities[(entities.size() - 1)]->setListener(this);
 
@@ -545,6 +544,35 @@ update_status ModuleGame::Update()
 		entities[(entities.size() - 1)]->setListener(this);
 		
 	}
+	if (IsKeyPressed(KEY_R))
+	{
+		for (int i = 0; i < entities.size() ;i++){
+			if (entities[i]->body->ctype == ColliderType::BALL){
+				entities.erase(entities.begin() + i);
+				TraceLog(LOG_INFO, "BOLA ELIMINADA");
+			}
+				
+		}
+		Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
+		entities.emplace_back(ball);
+		entities[(entities.size() - 1)]->setListener(this);
+		score = 0;
+	}
+
+	int x, y;
+	for (int i = 0; i < entities.size(); i++) {
+		if (entities[i]->body->ctype == ColliderType::BALL) {
+			entities[i]->body->GetPhysicPosition(x, y);
+			if (y >= SCREEN_HEIGHT * SCALE){
+				entities.erase(entities.begin() + i);
+				TraceLog(LOG_INFO, "ADIOS BOLA ;)");
+				Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
+				entities.emplace_back(ball);
+				entities[(entities.size() - 1)]->setListener(this);
+			}
+		}
+	}
+
 	// Prepare for raycast ------------------------------------------------------
 	
 	vec2i mouse;
