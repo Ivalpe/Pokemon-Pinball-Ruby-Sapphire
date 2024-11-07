@@ -4,6 +4,7 @@
 #include "Globals.h"
 
 #include "box2d\box2d.h"
+#include "ModuleGame.h"
 
 #define GRAVITY_X 0.0f
 #define GRAVITY_Y -7.0f
@@ -28,6 +29,7 @@ class PhysBody
 public:
 	PhysBody() : body(NULL)
 	{}
+	
 
 	void GetPhysicPosition(int& x, int& y) const;
 	float GetRotation() const;
@@ -56,6 +58,7 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateStaticRectangle(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
+
 	void BeginContact(b2Contact* contact) override;
 	PhysBody* CreatePinball(b2Vec2* coords, int size, ColliderType ct);
 	PhysBody* CreateKicker();
@@ -76,3 +79,4 @@ private:
 	const float kickerForce = -500.0f;
 	
 };
+

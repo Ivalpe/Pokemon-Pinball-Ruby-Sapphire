@@ -38,13 +38,12 @@ public:
 	Texture2D spring;
 	Texture2D flipper;
 	Texture2D bouncetx;
-
 	Texture2D background;
 	Texture2D background_layer;
 	Texture2D end;
 	
 
-	uint32 bonus_fx;
+	
 
 	vec2<int> ray;
 	bool ray_on;
@@ -55,5 +54,11 @@ private:
 	bool extraBall = true;
 	int lifes;
 	bool endRun;
+
+	Music music;
+	float timePlayed = 0.0f;
+	int flipper_fx;
+	int spring_fx;
+	int bonus_fx;
 };
 
