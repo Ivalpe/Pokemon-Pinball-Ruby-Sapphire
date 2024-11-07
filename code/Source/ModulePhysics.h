@@ -18,9 +18,11 @@
 
 enum ColliderType {
 	FLIPPER,
-	BUMPER,
-	KICKER,
-	CIRCLE,
+	SPRING,
+	BALL,
+	WALL,
+	NORMAL,
+	BOUNCE
 };
 class PhysBody
 {
@@ -33,11 +35,11 @@ public:
 	float GetRotation() const;
 	bool Contains(int x, int y) const;
 	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
-	ColliderType ctype;
 public:
 	int width, height;
 	b2Body* body;
 	Module* listenerptr = nullptr;
+	ColliderType ctype;
 };
 
 // Module --------------------------------------
@@ -46,20 +48,19 @@ class ModulePhysics : public Module, b2ContactListener
 public:
 	ModulePhysics(Application* app, bool start_enabled = true);
 	~ModulePhysics();
-
 	bool Start();
 	update_status PreUpdate();
 	update_status PostUpdate();
 	bool CleanUp();
 	PhysBody* createFlipper(bool right);
 	PhysBody* CreateCircle(int x, int y, int radius);
-	PhysBody* CreateStaticCircle(int x, int y, int radius);
+	PhysBody* CreateCollisionCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateStaticRectangle(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
 
 	void BeginContact(b2Contact* contact) override;
-	void CreatePinball(b2Vec2* coords, int size);
+	PhysBody* CreatePinball(b2Vec2* coords, int size, ColliderType ct);
 	PhysBody* CreateKicker();
 	bool getDebug() {
 		return debug;

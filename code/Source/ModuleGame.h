@@ -23,9 +23,11 @@ public:
 	bool CleanUp();
 	void OnCollision(PhysBody* A, PhysBody* B) override;
 	void DrawScore();
+private:
 public:
 
 	std::vector<PhysicEntity*> entities;
+	std::vector<PhysicEntity*> obstacles;
 	
 	PhysBody* sensor;
 	bool sensed;
@@ -35,9 +37,10 @@ public:
 	Texture2D rick;
 	Texture2D spring;
 	Texture2D flipper;
-	Texture2D bumper;
+	Texture2D bouncetx;
 	Texture2D background;
 	Texture2D background_layer;
+	Texture2D end;
 	
 
 	
@@ -46,6 +49,11 @@ public:
 	bool ray_on;
 private:
 	int score;
+	int highscore;
+	int previousscore;
+	bool extraBall = true;
+	int lifes;
+	bool endRun;
 
 	Music music;
 	float timePlayed = 0.0f;
