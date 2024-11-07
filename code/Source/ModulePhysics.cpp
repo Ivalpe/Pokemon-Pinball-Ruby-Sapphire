@@ -85,14 +85,6 @@ PhysBody* ModulePhysics::createFlipper(bool right) {
 update_status ModulePhysics::PreUpdate()
 {
 	world->Step(1.0f / 60.0f, 6, 2);
-
-	// TODO: HomeWork
-	/*
-	for(b2Contact* c = world->GetContactList(); c; c = c->GetNext())
-	{
-	}
-	*/
-
 	return UPDATE_CONTINUE;
 }
 
@@ -405,7 +397,6 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 	return ret;
 }
 
-// TODO 3
 void ModulePhysics::BeginContact(b2Contact* contact) {
 	PhysBody* A = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData().pointer;
 	PhysBody* B = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData().pointer;

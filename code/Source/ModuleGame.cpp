@@ -661,7 +661,7 @@ update_status ModuleGame::Update()
 				entities[(entities.size() - 1)]->setListener(this);
 				lifes--;
 			}
-			if (x >= 162 && x <= 184 && y <= 283 && y >= 280 && extraBall) {
+			if (x >= 162 && x <= 192 && y <= 300 && y >= 280 && extraBall) {
 				Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
 				entities.emplace_back(ball);
 				entities[(entities.size() - 1)]->setListener(this);
