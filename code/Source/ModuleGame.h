@@ -23,6 +23,7 @@ public:
 	bool CleanUp();
 	void OnCollision(PhysBody* A, PhysBody* B) override;
 	void DrawScore();
+private:
 public:
 
 	std::vector<PhysicEntity*> entities;

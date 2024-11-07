@@ -235,12 +235,8 @@ bool ModuleGame::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-<<<<<<< Updated upstream
-	circle = LoadTexture("Assets/ball.png"); 
-	bouncetx = LoadTexture("Assets/bounce.png");
-=======
 	circle = LoadTexture("Assets/ball.png");
->>>>>>> Stashed changes
+	bouncetx = LoadTexture("Assets/bounce.png");
 
 	box = LoadTexture("Assets/crate.png");
 	rick = LoadTexture("Assets/rick_head.png");
@@ -597,17 +593,13 @@ update_status ModuleGame::Update()
 	if (IsKeyPressed(KEY_ONE) && App->physics->getDebug())
 	{
 		entities.emplace_back(new Circle(App->physics, GetMouseX(), GetMouseY(), circle));
-<<<<<<< Updated upstream
-		TraceLog(LOG_INFO, "%d, %d", GetMouseX(), GetMouseY());
-		entities[(entities.size()-1)]->setListener(this);
+		entities[(entities.size() - 1)]->setListener(this);
 	}
 
 	if (IsKeyPressed(KEY_UP))
 	{
 		circle = LoadTexture("Assets/ball.png");
 		entities.emplace_back(new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle));
-=======
->>>>>>> Stashed changes
 		entities[(entities.size() - 1)]->setListener(this);
 		TraceLog(LOG_INFO, "%d | %d ", GetMouseX(), GetMouseY());
 	}
@@ -619,16 +611,19 @@ update_status ModuleGame::Update()
 				i--;
 				TraceLog(LOG_INFO, "BOLA ELIMINADA");
 			}
-
 		}
+
 		Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
 		entities.emplace_back(ball);
 		entities[(entities.size() - 1)]->setListener(this);
+
 		previousscore = score;
 		if (score >= highscore)
 			highscore = score;
 
 		score = 0;
+		lifes = 3;
+		endRun = false;
 	}
 
 	int x, y;
@@ -656,6 +651,17 @@ update_status ModuleGame::Update()
 
 	if (lifes <= 0) {
 		endRun = true;
+		for (int i = 0; i < entities.size(); i++) {
+			if (entities[i]->body->ctype == ColliderType::BALL) {
+				entities.erase(entities.begin() + i);
+				i--;
+				TraceLog(LOG_INFO, "BOLA ELIMINADA");
+			}
+		}
+
+		if (score >= highscore)
+			highscore = score;
+
 	}
 
 	// Prepare for raycast ------------------------------------------------------
@@ -728,13 +734,11 @@ void ModuleGame::OnCollision(PhysBody* A, PhysBody* B) {
 		break;
 	case ColliderType::BOUNCE:
 		TraceLog(LOG_INFO, "BOUNCE");
-		randomNum = rand() % 9000 + 1000;
-		score += randomNum;
+		if (!endRun) score += (rand() % 9000 + 1000);
 		break;
 	case ColliderType::NORMAL:
 		TraceLog(LOG_INFO, "NORMAL");
-		randomNum = rand() % 4000 + 1000;
-		score += randomNum;
+		if (!endRun && B->ctype == ColliderType::BALL) score += (rand() % 4000 + 1000);
 		break;
 	case ColliderType::WALL:
 		TraceLog(LOG_INFO, "WALL");
@@ -745,11 +749,4 @@ void ModuleGame::OnCollision(PhysBody* A, PhysBody* B) {
 	default:
 		break;
 	}
-	/*
-	if (A->ctype == ColliderType::FLIPPER) {
-		int randomNum = rand() % 9000 + 1000;
-		score += randomNum;
-		App->audio->PlayFx(bonus_fx);
-	}
-	*/
 }
