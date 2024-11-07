@@ -11,13 +11,11 @@ protected:
 
 	PhysicEntity(PhysBody* _body)
 		: body(_body)
-	{		
+	{
+
 	}
 
 public:
-	
-
-	
 	virtual ~PhysicEntity() = default;
 	virtual void Update() = 0;
 
@@ -36,25 +34,17 @@ protected:
 class Circle : public PhysicEntity
 {
 public:
-	float vx, vy; // Velocidades en los ejes x e y
-
 	Circle(ModulePhysics* physics, int _x, int _y, Texture2D _texture)
-		: PhysicEntity(physics->CreateCircle(_x, _y, 12)), texture(_texture)
+		: PhysicEntity(physics->CreateCircle(_x, _y, 12))
+		, texture(_texture)
 	{
-		vx = 2.0f; // Velocidad inicial en x
-		vy = -3.0f; // Velocidad inicial en y
+
 	}
 
 	void Update() override
 	{
-		// Actualizar la posición de la pelota según su velocidad
 		int x, y;
 		body->GetPhysicPosition(x, y);
-		x += (int)vx;
-		y += (int)vy;
-		 // Actualiza la posición física
-
-		// Dibujar la textura de la pelota
 		Vector2 position{ (float)x, (float)y };
 		float scale = 1.6f;
 		Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
@@ -97,6 +87,7 @@ public:
 
 private:
 	Texture2D texture;
+
 };
 
 class Box : public PhysicEntity
@@ -185,33 +176,6 @@ private:
 	Texture2D texture;
 	bool right;
 };
-class Bumper : public PhysicEntity
-{
-public:
-	Bumper(ModulePhysics* physics, int _x, int _y, Texture2D _texture)
-		: PhysicEntity(physics->CreateStaticCircle(_x, _y, 21))
-		, texture(_texture)
-	{
-
-	}
-
-	void Update() override
-	{
-		int x, y;
-		body->GetPhysicPosition(x, y);
-		Vector2 position{ (float)x, (float)y };
-		float scale = 1.6f;
-		Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
-		Rectangle dest = { position.x , position.y , (float)texture.width * scale , (float)texture.height * scale };
-		Vector2 origin = { ((float)texture.width / (2.0f)) * scale, ((float)texture.height / (2.0f)) * scale };
-		float rotation = body->GetRotation() * RAD2DEG;
-		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
-	}
-
-private:
-	Texture2D texture;
-
-};
 
 class CollisionChain : public PhysicEntity
 {
@@ -235,6 +199,7 @@ ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start
 
 	lifes = 3;
 	score = 0;
+
 }
 void ModuleGame::DrawScore() {
 	Vector2 position = { 100.0f, 10.0f };
@@ -269,49 +234,27 @@ bool ModuleGame::Start()
 	bool ret = true;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
-	
-
-	//InitAudioDevice();
-
-	music = LoadMusicStream("OST y efectos/Musica/Red Table.mp3");
-
-	if (music.stream.buffer == NULL) // Verifica que se haya cargado correctamente
-	{
-		LOG("Error loading music stream");
-		ret = false;
-	}
-	else
-	{
-		PlayMusicStream(music);
-	}
-
-	flipper_fx = App->audio->LoadFx("OST y efectos/Sound Effects/flipper.wav");   
-	spring_fx = App->audio->LoadFx("OST y efectos/Sound Effects/spring.wav");
-	bonus_fx = App->audio->LoadFx("OST y efectos/Sound Effects/bonus.wav");
 
 	circle = LoadTexture("Assets/ball.png");
-  bouncetx = LoadTexture("Assets/bounce.png");
+	bouncetx = LoadTexture("Assets/bounce.png");
 
-	bumper = LoadTexture("Assets/bumper.png");
-	Bumper* Bumper1 = (new Bumper(App->physics, 260.f, 280.f , bumper));
-	entities.emplace_back(Bumper1);
-	Bumper1->setListener(this);
-	Bumper1->body->ctype = ColliderType::BUMPER;
-	Bumper* Bumper2 = (new Bumper(App->physics, 330.f, 260.f, bumper));
-	entities.emplace_back(Bumper2);
-	Bumper2->setListener(this);
-	Bumper2->body->ctype = ColliderType::BUMPER;
-	Bumper* Bumper3 = new Bumper(App->physics, 300, 320, bumper);
-	entities.emplace_back(Bumper3); 
-	Bumper3->setListener(this);
-	Bumper3->body->ctype = ColliderType::BUMPER;
-
-	box = LoadTexture("Assets/crate.png");
-	rick = LoadTexture("Assets/rick_head.png");
 
 	background = LoadTexture("Assets/Ruby Table base.png");
 	background_layer = LoadTexture("Assets/Ruby Table base2.png");
 	end = LoadTexture("Assets/End.png");
+
+
+	music = LoadMusicStream("Audio/Music/Red Table.mp3");
+	flipper_fx = App->audio->LoadFx("Audio/Effects/flipper.wav");
+	spring_fx = App->audio->LoadFx("Audio/Effects/spring.wav");
+	bonus_fx = App->audio->LoadFx("Audio/Effects/bonus.wav");
+
+	if (music.stream.buffer == NULL) {
+		LOG("Error loading music stream");
+		ret = false;
+	}
+	else PlayMusicStream(music);
+
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
 
 
@@ -341,7 +284,9 @@ bool ModuleGame::Start()
 	entities.emplace_back(rightFlipper);
 	entities[(entities.size() - 1)]->setListener(this);
 
-	entities.emplace_back(new Circle(App->physics, 242.0f * SCALE, 350.0f * SCALE, circle));
+	//CIRCLE
+	Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
+	entities.emplace_back(ball);
 	entities[(entities.size() - 1)]->setListener(this);
 
 	b2Vec2 pinball[] = {
@@ -641,11 +586,8 @@ bool ModuleGame::CleanUp()
 	UnloadTexture(background);
 	UnloadTexture(background_layer);
 	UnloadTexture(flipper);
-
 	StopMusicStream(music);
 	UnloadMusicStream(music);
-
-	//CloseAudioDevice();
 
 	return true;
 }
@@ -653,12 +595,17 @@ bool ModuleGame::CleanUp()
 // Update: draw background
 update_status ModuleGame::Update()
 {
-	UpdateMusicStream(music);
 
+	UpdateMusicStream(music);
 	timePlayed = GetMusicTimePlayed(music) / GetMusicTimeLength(music);
 	if (timePlayed > 1.0f) timePlayed = 1.0f;
 
-	if(IsKeyPressed(KEY_SPACE))
+	if (IsKeyPressed(KEY_LEFT)) App->audio->PlayFx(flipper_fx);
+	if (IsKeyPressed(KEY_RIGHT)) App->audio->PlayFx(flipper_fx);
+	if (IsKeyPressed(KEY_DOWN)) App->audio->PlayFx(spring_fx);
+
+
+	if (IsKeyPressed(KEY_SPACE))
 	{
 		ray_on = !ray_on;
 		ray.x = GetMouseX();
@@ -674,11 +621,10 @@ update_status ModuleGame::Update()
 	if (IsKeyPressed(KEY_UP))
 	{
 		circle = LoadTexture("Assets/ball.png");
-		entities.emplace_back(new Circle(App->physics, 242.0f * SCALE, 350.0f * SCALE, circle));
+		entities.emplace_back(new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle));
 		entities[(entities.size() - 1)]->setListener(this);
 		TraceLog(LOG_INFO, "%d | %d ", GetMouseX(), GetMouseY());
 	}
-  
 	if (IsKeyPressed(KEY_R))
 	{
 		for (int i = 0; i < entities.size(); i++) {
@@ -696,6 +642,7 @@ update_status ModuleGame::Update()
 		previousscore = score;
 		if (score >= highscore)
 			highscore = score;
+		extraBall = true;
 
 		score = 0;
 		lifes = 3;
@@ -737,18 +684,6 @@ update_status ModuleGame::Update()
 
 		if (score >= highscore)
 			highscore = score;
-
-	if (IsKeyPressed(KEY_LEFT)) {
-		App->audio->PlayFx(flipper_fx);
-	}
-
-	if (IsKeyPressed(KEY_RIGHT)) {
-		App->audio->PlayFx(flipper_fx);
-	}
-	if (IsKeyPressed(KEY_DOWN))
-	{
-		App->audio->PlayFx(spring_fx);
-
 
 	}
 
@@ -805,14 +740,11 @@ update_status ModuleGame::Update()
 	}
 
 
-	// Llama a la función para dibujar "SCORE" y el puntaje
 	DrawScore();
-	//TraceLog(LOG_INFO, "%d", entities.size());
 
 	return UPDATE_CONTINUE;
 }
 
-// TODO 8: Now just define collision callback for the circle and play bonus_fx audio
 void ModuleGame::OnCollision(PhysBody* A, PhysBody* B) {
 	int randomNum;
 	switch (A->ctype)
@@ -822,17 +754,17 @@ void ModuleGame::OnCollision(PhysBody* A, PhysBody* B) {
 		break;
 	case ColliderType::BOUNCE:
 		TraceLog(LOG_INFO, "BOUNCE");
-		if (!endRun){
-      score += (rand() % 9000 + 1000);
-      App->audio->PlayFx(bonus_fx);
-    }
+		if (!endRun) {
+			score += (rand() % 9000 + 1000);
+			App->audio->PlayFx(bonus_fx);
+		}
 		break;
 	case ColliderType::NORMAL:
 		TraceLog(LOG_INFO, "NORMAL");
 		if (!endRun && B->ctype == ColliderType::BALL) {
-      score += (rand() % 4000 + 1000);
-      App->audio->PlayFx(bonus_fx);
-    }
+			score += (rand() % 4000 + 1000);
+			App->audio->PlayFx(bonus_fx);
+		}
 		break;
 	case ColliderType::WALL:
 		TraceLog(LOG_INFO, "WALL");

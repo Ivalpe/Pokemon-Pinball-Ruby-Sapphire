@@ -62,7 +62,6 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 	
     StopMusicStream(music);
     music = LoadMusicStream(path);
-
     
     PlayMusicStream(music);
 

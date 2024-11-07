@@ -33,17 +33,13 @@ public:
 	bool sensed;
 
 	Texture2D circle;
-	Texture2D box;
-	Texture2D rick;
 	Texture2D spring;
 	Texture2D flipper;
 	Texture2D bouncetx;
+
 	Texture2D background;
 	Texture2D background_layer;
 	Texture2D end;
-	
-
-	
 
 	vec2<int> ray;
 	bool ray_on;
@@ -55,6 +51,7 @@ private:
 	int lifes;
 	bool endRun;
 
+	//Music
 	Music music;
 	float timePlayed = 0.0f;
 	int flipper_fx;
