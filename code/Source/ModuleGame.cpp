@@ -89,6 +89,42 @@ private:
 	Texture2D texture;
 
 };
+class CollisionRectangle : public PhysicEntity
+{
+public:
+	CollisionRectangle(ModulePhysics* physics, int _x, int _y, int width, int height, Texture2D _texture)
+		: PhysicEntity(physics->CreateCollisionRectangle(_x, _y, width, height))
+		, texture(_texture)
+	{
+	}
+
+	void Update() override
+	{
+		int x, y;
+		body->GetPhysicPosition(x, y);  // Obtener la posición física del rectángulo
+		Vector2 position{ (float)x, (float)y };
+
+		// Escalar el rectángulo si deseas agrandar o reducir la textura (ajustable)
+		float scaleX = 1.6f;  // Escala en X
+		float scaleY = 1.6f;  // Escala en Y
+
+		// Definir las áreas de origen y destino para dibujar la textura
+		Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
+		Rectangle dest = { position.x, position.y, (float)texture.width * scaleX, (float)texture.height * scaleY };
+
+		// Calcular el origen para centrar la textura en el rectángulo de colisión
+		Vector2 origin = { ((float)texture.width / 2.0f) * scaleX, ((float)texture.height / 2.0f) * scaleY };
+
+		// Obtener la rotación del cuerpo físico (en grados)
+		float rotation = body->GetRotation() * RAD2DEG;
+
+		// Dibujar la textura usando DrawTexturePro
+		DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
+	}
+
+private:
+	Texture2D texture;
+};
 
 class Box : public PhysicEntity
 {
@@ -237,7 +273,7 @@ bool ModuleGame::Start()
 
 	circle = LoadTexture("Assets/ball.png");
 	bouncetx = LoadTexture("Assets/bounce.png");
-
+	pikachu = LoadTexture("Assets/pikachu.png");
 
 	background = LoadTexture("Assets/Ruby Table base.png");
 	background_layer = LoadTexture("Assets/Ruby Table base2.png");
@@ -266,6 +302,12 @@ bool ModuleGame::Start()
 	entities.emplace_back(new CollisionCircle(App->physics, 324, 282, bouncetx));
 	entities[(entities.size() - 1)]->setListener(this);
 	entities.emplace_back(new CollisionCircle(App->physics, 283, 338, bouncetx));
+	entities[(entities.size() - 1)]->setListener(this);
+
+	//COLLISIONS PIKACHU
+	entities.emplace_back(new CollisionRectangle(App->physics, 61, 768, 27, 28, pikachu));
+	entities[(entities.size() - 1)]->setListener(this);
+	entities.emplace_back(new CollisionRectangle(App->physics, 419, 768, 27, 28, pikachu));
 	entities[(entities.size() - 1)]->setListener(this);
 
 	//SPRING
@@ -571,6 +613,15 @@ bool ModuleGame::Start()
 	};
 	obstacles.emplace_back(new CollisionChain(App->physics, pinball10, 10, ColliderType::NORMAL));
 
+	//b2Vec2 bumperRectangle1[] = {
+	//b2Vec2(63, 765),  // Primer vértice
+	////b2Vec2(95, y1),  // Segundo vértice
+	////b2Vec2(x2, y2),  // Tercer vértice
+	////b2Vec2(x1, y2),  // Cuarto vértice
+	////b2Vec2(x1, y1)   // Volver al primer vértice para cerrar el rectángulo
+	//};
+	//obstacles.emplace_back(new CollisionChain(App->physics, bumperRectangle1, 5, ColliderType::PIKACHU));
+
 	for (auto i : obstacles) i->setListener(this);
 
 	return ret;
@@ -583,6 +634,7 @@ bool ModuleGame::CleanUp()
 	UnloadTexture(circle);
 	UnloadTexture(spring);
 	UnloadTexture(bouncetx);
+	UnloadTexture(pikachu);
 	UnloadTexture(background);
 	UnloadTexture(background_layer);
 	UnloadTexture(flipper);
@@ -618,11 +670,11 @@ update_status ModuleGame::Update()
 		entities[(entities.size() - 1)]->setListener(this);
 	}
 
+	
 	if (IsKeyPressed(KEY_R))
 	{
 		for (int i = 0; i < entities.size(); i++) {
 			if (entities[i]->body->ctype == ColliderType::BALL) {
-				App->physics->DeleteBody(entities[i]->body->body);
 				entities.erase(entities.begin() + i);
 				i--;
 				TraceLog(LOG_INFO, "BOLA ELIMINADA");
@@ -648,7 +700,6 @@ update_status ModuleGame::Update()
 		if (entities[i]->body->ctype == ColliderType::BALL) {
 			entities[i]->body->GetPhysicPosition(x, y);
 			if (y >= SCREEN_HEIGHT * SCALE) {
-				App->physics->DeleteBody(entities[i]->body->body);
 				entities.erase(entities.begin() + i);
 				TraceLog(LOG_INFO, "ADIOS BOLA ;)");
 				Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
@@ -671,7 +722,6 @@ update_status ModuleGame::Update()
 		endRun = true;
 		for (int i = 0; i < entities.size(); i++) {
 			if (entities[i]->body->ctype == ColliderType::BALL) {
-				App->physics->DeleteBody(entities[i]->body->body);
 				entities.erase(entities.begin() + i);
 				i--;
 				TraceLog(LOG_INFO, "BOLA ELIMINADA");
@@ -735,7 +785,7 @@ update_status ModuleGame::Update()
 		}
 	}
 
-	if(App->physics->getDebug()) DrawFPS(10, 10);
+
 	DrawScore();
 
 	return UPDATE_CONTINUE;
@@ -755,6 +805,7 @@ void ModuleGame::OnCollision(PhysBody* A, PhysBody* B) {
 			App->audio->PlayFx(bonus_fx);
 		}
 		break;
+
 	case ColliderType::NORMAL:
 		TraceLog(LOG_INFO, "NORMAL");
 		if (!endRun && B->ctype == ColliderType::BALL) {
