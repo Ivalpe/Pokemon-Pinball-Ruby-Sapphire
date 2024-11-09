@@ -176,6 +176,48 @@ public:
 private:
 	Texture2D texture;
 };
+class Pikachuclass : public PhysicEntity
+{
+public:
+
+	Pikachuclass(ModulePhysics* physics, Texture2D _texture)
+		: PhysicEntity(physics->CreatePikaSpring())
+		, texture(_texture)
+	{
+		body->ctype = ColliderType::SPRING;
+	}
+
+	void Update() override
+	{
+		int x, y;
+		body->GetPhysicPosition(x, y);
+		DrawTextureEx(texture, Vector2{ (float)x - (texture.width / 2), (float)y - (texture.height / 2) }, body->GetRotation() * RAD2DEG, 1.0f, WHITE);
+	}
+
+private:
+	Texture2D texture;
+};
+class Pikachuclasstwo : public PhysicEntity
+{
+public:
+
+	Pikachuclasstwo(ModulePhysics* physics, Texture2D _texture)
+		: PhysicEntity(physics->CreatePikaSpringtwo())
+		, texture(_texture)
+	{
+		body->ctype = ColliderType::SPRING;
+	}
+
+	void Update() override
+	{
+		int x, y;
+		body->GetPhysicPosition(x, y);
+		DrawTextureEx(texture, Vector2{ (float)x - (texture.width / 2), (float)y - (texture.height / 2) }, body->GetRotation() * RAD2DEG, 1.0f, WHITE);
+	}
+
+private:
+	Texture2D texture;
+};
 
 class Flipper : public PhysicEntity
 {
@@ -305,9 +347,11 @@ bool ModuleGame::Start()
 	entities[(entities.size() - 1)]->setListener(this);
 
 	//COLLISIONS PIKACHU
-	entities.emplace_back(new CollisionRectangle(App->physics, 61, 768, 27, 28, pikachu));
+	//entities.emplace_back(new CollisionRectangle(App->physics, 61, 768, 27, 28, pikachu));
+	entities.emplace_back(new Pikachuclasstwo(App->physics, pikachu));
 	entities[(entities.size() - 1)]->setListener(this);
-	entities.emplace_back(new CollisionRectangle(App->physics, 419, 768, 27, 28, pikachu));
+	//entities.emplace_back(new CollisionRectangle(App->physics, 419, 768, 27, 28, pikachu));
+	entities.emplace_back(new Pikachuclass(App->physics, pikachu));
 	entities[(entities.size() - 1)]->setListener(this);
 
 	//SPRING
@@ -675,7 +719,6 @@ update_status ModuleGame::Update()
 	{
 		for (int i = 0; i < entities.size(); i++) {
 			if (entities[i]->body->ctype == ColliderType::BALL) {
-				App->physics->DeleteBody(entities[i]->body->body);
 				entities.erase(entities.begin() + i);
 				i--;
 				TraceLog(LOG_INFO, "BOLA ELIMINADA");
@@ -701,7 +744,6 @@ update_status ModuleGame::Update()
 		if (entities[i]->body->ctype == ColliderType::BALL) {
 			entities[i]->body->GetPhysicPosition(x, y);
 			if (y >= SCREEN_HEIGHT * SCALE) {
-				App->physics->DeleteBody(entities[i]->body->body);
 				entities.erase(entities.begin() + i);
 				TraceLog(LOG_INFO, "ADIOS BOLA ;)");
 				Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
@@ -724,7 +766,6 @@ update_status ModuleGame::Update()
 		endRun = true;
 		for (int i = 0; i < entities.size(); i++) {
 			if (entities[i]->body->ctype == ColliderType::BALL) {
-				App->physics->DeleteBody(entities[i]->body->body);
 				entities.erase(entities.begin() + i);
 				i--;
 				TraceLog(LOG_INFO, "BOLA ELIMINADA");
