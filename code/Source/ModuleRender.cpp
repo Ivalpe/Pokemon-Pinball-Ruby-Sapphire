@@ -45,10 +45,6 @@ update_status ModuleRender::Update()
 update_status ModuleRender::PostUpdate()
 {
     // Draw everything in our batch!
-    DrawFPS(10, 10);
-
-
-    
     EndDrawing();
 
 	return UPDATE_CONTINUE;
