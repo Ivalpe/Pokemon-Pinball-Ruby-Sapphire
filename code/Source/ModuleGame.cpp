@@ -618,17 +618,11 @@ update_status ModuleGame::Update()
 		entities[(entities.size() - 1)]->setListener(this);
 	}
 
-	if (IsKeyPressed(KEY_UP))
-	{
-		circle = LoadTexture("Assets/ball.png");
-		entities.emplace_back(new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle));
-		entities[(entities.size() - 1)]->setListener(this);
-		TraceLog(LOG_INFO, "%d | %d ", GetMouseX(), GetMouseY());
-	}
 	if (IsKeyPressed(KEY_R))
 	{
 		for (int i = 0; i < entities.size(); i++) {
 			if (entities[i]->body->ctype == ColliderType::BALL) {
+				App->physics->DeleteBody(entities[i]->body->body);
 				entities.erase(entities.begin() + i);
 				i--;
 				TraceLog(LOG_INFO, "BOLA ELIMINADA");
@@ -654,6 +648,7 @@ update_status ModuleGame::Update()
 		if (entities[i]->body->ctype == ColliderType::BALL) {
 			entities[i]->body->GetPhysicPosition(x, y);
 			if (y >= SCREEN_HEIGHT * SCALE) {
+				App->physics->DeleteBody(entities[i]->body->body);
 				entities.erase(entities.begin() + i);
 				TraceLog(LOG_INFO, "ADIOS BOLA ;)");
 				Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
@@ -676,6 +671,7 @@ update_status ModuleGame::Update()
 		endRun = true;
 		for (int i = 0; i < entities.size(); i++) {
 			if (entities[i]->body->ctype == ColliderType::BALL) {
+				App->physics->DeleteBody(entities[i]->body->body);
 				entities.erase(entities.begin() + i);
 				i--;
 				TraceLog(LOG_INFO, "BOLA ELIMINADA");
