@@ -21,7 +21,8 @@ enum ColliderType {
 	BALL,
 	WALL,
 	NORMAL,
-	BOUNCE
+	BOUNCE, 
+	PIKACHU
 };
 class PhysBody
 {
@@ -50,23 +51,18 @@ public:
 	update_status PreUpdate();
 	update_status PostUpdate();
 	bool CleanUp();
-
 	PhysBody* createFlipper(bool right);
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreateCollisionCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateStaticRectangle(int x, int y, int width, int height);
+	PhysBody* CreateCollisionRectangle(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, const int* points, int size);
+	void BeginContact(b2Contact* contact) override;
 	PhysBody* CreatePinball(b2Vec2* coords, int size, ColliderType ct);
 	PhysBody* CreateKicker();
-
-	void BeginContact(b2Contact* contact) override;
-	
 	bool getDebug() {
 		return debug;
-	}
-	void DeleteBody(b2Body* body) {
-		world->DestroyBody(body);
 	}
 
 private:
