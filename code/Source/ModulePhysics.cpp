@@ -204,7 +204,7 @@ PhysBody* ModulePhysics::CreateCollisionRectangle(int x, int y, int width, int h
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;             
-	fixture.restitution = 1.0f;         
+	fixture.restitution = 2.0f;         
 
 	b->CreateFixture(&fixture);
 
