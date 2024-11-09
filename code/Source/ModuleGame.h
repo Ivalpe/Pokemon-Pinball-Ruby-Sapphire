@@ -36,6 +36,7 @@ public:
 	Texture2D spring;
 	Texture2D flipper;
 	Texture2D bouncetx;
+	Texture2D pikachu;
 
 	Texture2D background;
 	Texture2D background_layer;
@@ -58,4 +59,3 @@ private:
 	int spring_fx;
 	int bonus_fx;
 };
-
