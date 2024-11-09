@@ -190,6 +190,36 @@ PhysBody* ModulePhysics::CreateStaticRectangle(int x, int y, int width, int heig
 	return pbody;
 }
 
+PhysBody* ModulePhysics::CreateCollisionRectangle(int x, int y, int width, int height)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.density = 1.0f;             
+	fixture.restitution = 1.0f;         
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->ctype = ColliderType::BOUNCE;
+	pbody->body = b;
+	pbody->width = (int)(width * 0.5f);
+	pbody->height = (int)(height * 0.5f);
+
+	b->GetUserData().pointer = (uintptr_t)pbody;
+
+	return pbody;
+}
+
+
 PhysBody* ModulePhysics::CreateChain(int x, int y, const int* points, int size)
 {
 	b2BodyDef body;
