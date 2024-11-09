@@ -35,4 +35,4 @@ To play, simply use the left and right arrow keys to control the flippers, bounc
  - Bernat Loza - Programming, debugging, sounds and ost
  - Pau Gutens - Programming, debugging
 
- L
+ 
