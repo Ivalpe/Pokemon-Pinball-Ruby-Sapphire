@@ -1,36 +1,40 @@
-# {Pokémon pinball}
+ Pokémon pinball
 
-## Description
+ Description
 
-{Es una recreación de uno de los pinballs de Pokémon que existen, concretamente el "Pokémon Pinball: Ruby & Sapphire"}
+This is a recreation of one of the Pokémon pinball games, specifically Pokémon Pinball: Ruby & Sapphire. 
 
-## Key Features
+How to Play
 
- - {Flippers made}
- - {Spring made}
- - {Point counter, hight score}
- - {Death screen}
- - {Bonus ball}
- - {Bouncers implemented}
+To play, simply use the left and right arrow keys to control the flippers, bouncing the ball around the playfield to hit targets, complete challenges, and rack up points. The goal is to score as high as possible before losing all your balls. Use the down arrow key to activate the spring and launch the ball. If you’re able to hit certain targets or complete objectives, you may earn bonus balls to keep the game going. If you lose all your balls, the game ends, and you can try again to beat your high score.
 
-## Controls
+ Key Features
 
- - {Left and right arrows = flippers}
- - Down arrow = jumper}
- - {Left and right arrows = flippers}
- - {F1 = activate debug mode}
- - {R = restart}
+ - Flippers made
+ - Spring made
+ - Point counter, hight score
+ - Death screen
+ - Bonus ball
+ - Bouncers implemented
 
-## Developers
+ Controls
 
- - {Lara Guevara} - {Programming, debugging, physics}
- - {Maria Besora} - {Programming, debugging, physics}
- - {Iván Álvarez} - {Programming, debugging, animations}
- - {Bernat Loza} - {Programming, debugging, sounds and ost}
- - {Pau Gutens} - {Programming, debugging}
+ - Left and right arrows = flippers
+ - Down arrow = jumper
+ - Left and right arrows = flippers
+ - F1 = activate debug mode
+ - R = restart
 
-## License
+ Developers
+
+ - Lara Guevara - Programming, debugging, physics
+ - Maria Besora - Programming, debugging, physics
+ - Iván Álvarez - Programming, debugging, animations
+ - Bernat Loza - Programming, debugging, sounds and ost
+ - Pau Gutens - Programming, debugging
+
+ License
 
 This project is licensed under an unmodified MIT license, which is an OSI-certified license that allows static linking with closed source software. Check [LICENSE](LICENSE) for further details.
 
-{AdditionalLicenses}
+
