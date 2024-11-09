@@ -64,6 +64,9 @@ public:
 	bool getDebug() {
 		return debug;
 	}
+	void DeleteBody(b2Body* body) {
+		world->DestroyBody(body);
+	}
 
 private:
 
