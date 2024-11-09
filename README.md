@@ -21,7 +21,7 @@ To play, simply use the left and right arrow keys to control the flippers, bounc
 
  Controls
 
- - Left and right arrows = flippers
+ - Left and right arrows = flippers and pikachu
  - Down arrow = jumper
  - Left and right arrows = flippers
  - F1 = activate debug mode
