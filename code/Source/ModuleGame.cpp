@@ -735,7 +735,7 @@ update_status ModuleGame::Update()
 		}
 	}
 
-
+	if(App->physics->getDebug()) DrawFPS(10, 10);
 	DrawScore();
 
 	return UPDATE_CONTINUE;
