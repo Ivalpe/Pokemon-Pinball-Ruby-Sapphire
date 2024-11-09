@@ -1,26 +1,33 @@
-# {Project Name}
+# {Pokémon pinball}
 
 ## Description
 
-{project description}
+{Es una recreación de uno de los pinballs de Pokémon que existen, concretamente el "Pokémon Pinball: Ruby & Sapphire"}
 
 ## Key Features
 
- - {Feature01}
- - {Feature02}
- - {Feature03}
- - {Feature04}
- 
+ - {Flippers made}
+ - {Spring made}
+ - {Point counter, hight score}
+ - {Death screen}
+ - {Bonus ball}
+ - {Bouncers implemented}
+
 ## Controls
 
- - {ControlsScheme}
+ - {Left and right arrows = flippers}
+ - Down arrow = jumper}
+ - {Left and right arrows = flippers}
+ - {F1 = activate debug mode}
+ - {R = restart}
 
 ## Developers
 
- - {Dev01} - {Role(s)}
- - {Dev02} - {Role(s)}
- - {Dev03} - {Role(s)}
- - {Dev04} - {Role(s)}
+ - {Lara Guevara} - {Programming, debugging, physics}
+ - {Maria Besora} - {Programming, debugging, physics}
+ - {Iván Álvarez} - {Programming, debugging, animations}
+ - {Bernat Loza} - {Programming, debugging, sounds and ost}
+ - {Pau Gutens} - {Programming, debugging}
 
 ## License
 
