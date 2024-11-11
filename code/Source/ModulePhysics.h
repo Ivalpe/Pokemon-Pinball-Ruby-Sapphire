@@ -61,11 +61,10 @@ public:
 	void BeginContact(b2Contact* contact) override;
 	PhysBody* CreatePinball(b2Vec2* coords, int size, ColliderType ct);
 	PhysBody* CreateKicker();
+	PhysBody* CreatePikaSpring(bool right);
+
 	bool getDebug() {
 		return debug;
-	}
-	void DeleteBody(b2Body* body) {
-		world->DestroyBody(body);
 	}
 
 private:
@@ -75,9 +74,14 @@ private:
 
 	//Kicker
 	b2Body* kickerBody;
+	b2Body* pikaBody;
+	b2Body* pikaBodytwo;
 	b2RevoluteJoint* leftFlipper;
 	b2RevoluteJoint* rightFlipper;
 	bool kickerActivated = false;
+	bool pikaActivated = false;
+	bool pikatwoActivated = false;
 	const float kickerForce = -500.0f;
+	const float pikaForce = -150.0f;
 	
 };

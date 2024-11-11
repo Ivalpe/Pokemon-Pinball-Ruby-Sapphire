@@ -204,7 +204,7 @@ PhysBody* ModulePhysics::CreateCollisionRectangle(int x, int y, int width, int h
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;             
-	fixture.restitution = 2.0f;         
+	fixture.restitution = 1.0f;         
 
 	b->CreateFixture(&fixture);
 
@@ -270,18 +270,24 @@ update_status ModulePhysics::PostUpdate()
 
 	if (IsKeyDown(KEY_LEFT)) {
 		leftFlipper->SetMotorSpeed(15);
+		pikaBodytwo->ApplyForceToCenter(b2Vec2(0, pikaForce), true);
+		pikatwoActivated = true;
 	}
 
 	if (IsKeyReleased(KEY_LEFT)) {
 		leftFlipper->SetMotorSpeed(-15);
+		pikatwoActivated = false;
 	}
 
 	if (IsKeyDown(KEY_RIGHT)) {
 		rightFlipper->SetMotorSpeed(-15);
+		pikaBody->ApplyForceToCenter(b2Vec2(0, pikaForce), true);
+		pikaActivated = true;
 	}
 
 	if (IsKeyReleased(KEY_RIGHT)) {
 		rightFlipper->SetMotorSpeed(15);
+		pikaActivated = false;
 	}
 
 
@@ -520,6 +526,73 @@ PhysBody* ModulePhysics::CreateKicker() {
 	pbody->body = kickerBody;
 
 	kickerBody->GetUserData().pointer = (uintptr_t)pbody;
+
+	return pbody;
+}
+PhysBody* ModulePhysics::CreatePikaSpring(bool right) {
+	float scalekicker = 50.0f;
+	float initialX, initialY;
+	if (right) {
+		initialX = 419.0f;
+		initialY = 768.0f;
+	}
+	else {
+		initialX = 61.0f;
+		initialY = 768.0f;
+	}
+	
+	float pikaWidth = PIXEL_TO_METERS(27.0f);
+	float pikaHeight = PIXEL_TO_METERS(28.0f);
+
+
+
+	// Body
+	b2BodyDef springBodyDef;
+	springBodyDef.type = b2_dynamicBody;
+	springBodyDef.position.Set(initialX, initialY);
+	if(right) pikaBody = world->CreateBody(&springBodyDef);
+	else pikaBodytwo = world->CreateBody(&springBodyDef);
+
+	// Shape
+	b2PolygonShape springShape;
+	springShape.SetAsBox(pikaWidth/2.5, pikaHeight/2.5);
+
+	// Fixture
+	b2FixtureDef springFixtureDef;
+	springFixtureDef.shape = &springShape;
+	springFixtureDef.density = 1.0f;
+	springFixtureDef.friction = 0.5f;
+	if(right) pikaBody->CreateFixture(&springFixtureDef);
+	else pikaBodytwo->CreateFixture(&springFixtureDef);
+
+	// Joint
+	b2BodyDef anchorBodyDef;
+	anchorBodyDef.type = b2_staticBody;
+	anchorBodyDef.position.Set((initialX) / scalekicker, (initialY - pikaHeight) / scalekicker);
+	b2Body* anchorBody = world->CreateBody(&anchorBodyDef);
+
+	b2PrismaticJointDef jointDef;
+	jointDef.bodyA = anchorBody;
+	if(right) jointDef.bodyB = pikaBody;
+	else jointDef.bodyB = pikaBodytwo;
+	jointDef.localAnchorA.Set(0, 0);
+	jointDef.localAnchorB.Set(0, 0);
+	jointDef.enableLimit = true;
+	jointDef.lowerTranslation = -10.0f / scalekicker;
+	jointDef.upperTranslation = 0.0f;
+	jointDef.localAxisA.Set(0, 1);
+	world->CreateJoint(&jointDef);
+
+
+	PhysBody* pbody = new PhysBody();
+	if (right) {
+		pbody->body = pikaBody;
+		pikaBody->GetUserData().pointer = (uintptr_t)pbody;
+	}
+	else {
+		pbody->body = pikaBodytwo;
+		pikaBodytwo->GetUserData().pointer = (uintptr_t)pbody;
+	}
 
 	return pbody;
 }
