@@ -61,8 +61,7 @@ public:
 	void BeginContact(b2Contact* contact) override;
 	PhysBody* CreatePinball(b2Vec2* coords, int size, ColliderType ct);
 	PhysBody* CreateKicker();
-	PhysBody* CreatePikaSpring();
-	PhysBody* CreatePikaSpringtwo();
+	PhysBody* CreatePikaSpring(bool right);
 
 	bool getDebug() {
 		return debug;
