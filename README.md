@@ -24,18 +24,17 @@ To play, simply use the left and right arrow keys to control the flippers, bounc
 
  Controls
 
- - Left and right arrows = flippers and pikachu
- - Down arrow = jumper
- - Left and right arrows = flippers
- - F1 = activate debug mode
- - R = restart
+ - Left and Right arrows : Flippers and Pikachu
+ - Down arrow : Jumper
+ - F1 : activate Debug mode
+ - R : Restart
 
  Developers
 
- - Lara Guevara - Programming, debugging, physics
- - Maria Besora - Programming, debugging, physics
- - Iván Álvarez - Programming, debugging, animations
- - Bernat Loza - Programming, debugging, sounds and ost
- - Pau Gutsens - Programming, debugging
+ - Lara Guevara - Debugging, Physics, Animations, Map, Joints, Hud
+ - Maria Besora - Debugging, Physics, Hud, Pikachu, Testing
+ - Iván Álvarez - Debugging, Physiscs, Animations, Map, Joints, Hud
+ - Bernat Loza - Debugging, Sounds effects, Music
+ - Pau Gutsens - Debugging, Pikachu
 
  
