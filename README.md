@@ -6,6 +6,7 @@ Pokémon pinball
 
 This is a recreation of one of the Pokémon pinball games, specifically Pokémon Pinball: Ruby & Sapphire. 
 Link: https://bulbapedia.bulbagarden.net/wiki/Pokémon_Pinball:_Ruby_%26_Sapphire
+
 The difference between our project and the original game is the way of scoring, the Pikachu that in the original game you have to charge to save you, and the objective, which in the original is to capture Pokémon.
 
 How to Play
