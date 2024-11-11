@@ -1,5 +1,7 @@
 <h1>Pokémon Pinball: Ruby & Sapphire</h1>
 
+![PokemonPinball](https://static.wikia.nocookie.net/espokemon/images/8/8b/Pinball_Rubi_y_Zafiro_caja.jpg/revision/latest?cb=20100122213010))
+
 GitHub link: https://github.com/Ivalpe/Pinball-Fisica
 
 <h2>Description</h2>
