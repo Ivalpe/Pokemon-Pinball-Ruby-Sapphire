@@ -534,11 +534,11 @@ PhysBody* ModulePhysics::CreatePikaSpring(bool right) {
 	float initialX, initialY;
 	if (right) {
 		initialX = 419.0f;
-		initialY = 768.0f;
+		initialY = 770.0f;
 	}
 	else {
 		initialX = 61.0f;
-		initialY = 768.0f;
+		initialY = 770.0f;
 	}
 	
 	float pikaWidth = PIXEL_TO_METERS(27.0f);

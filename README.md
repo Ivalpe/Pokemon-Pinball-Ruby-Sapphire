@@ -5,6 +5,8 @@ Pokémon pinball
  Description
 
 This is a recreation of one of the Pokémon pinball games, specifically Pokémon Pinball: Ruby & Sapphire. 
+Link: https://bulbapedia.bulbagarden.net/wiki/Pokémon_Pinball:_Ruby_%26_Sapphire
+The difference between our project and the original game is the way of scoring, the Pikachu that in the original game you have to charge to save you, and the objective, which in the original is to capture Pokémon.
 
 How to Play
 
@@ -33,6 +35,6 @@ To play, simply use the left and right arrow keys to control the flippers, bounc
  - Maria Besora - Programming, debugging, physics
  - Iván Álvarez - Programming, debugging, animations
  - Bernat Loza - Programming, debugging, sounds and ost
- - Pau Gutens - Programming, debugging
+ - Pau Gutsens - Programming, debugging
 
  

@@ -256,6 +256,8 @@ ModuleGame::ModuleGame(Application* app, bool start_enabled) : Module(app, start
 
 	lifes = 3;
 	score = 0;
+	previousscore = 0;
+	highscore = 0;
 
 }
 void ModuleGame::DrawScore() {
@@ -312,8 +314,6 @@ bool ModuleGame::Start()
 	}
 	else PlayMusicStream(music);
 
-	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
-
 
 	flipper = LoadTexture("Assets/flipper.png");
 
@@ -350,7 +350,7 @@ bool ModuleGame::Start()
 	entities[(entities.size() - 1)]->setListener(this);
 
 	//CIRCLE
-	Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
+	Circle* ball = new Circle(App->physics, 242.0f * SCALE, 330.0f * SCALE, circle);
 	entities.emplace_back(ball);
 	entities[(entities.size() - 1)]->setListener(this);
 
@@ -692,11 +692,11 @@ update_status ModuleGame::Update()
 				App->physics->DeleteBody(entities[i]->body->body);
 				entities.erase(entities.begin() + i);
 				i--;
-				TraceLog(LOG_INFO, "BOLA ELIMINADA");
+				TraceLog(LOG_INFO, "BALL REMOVED");
 			}
 		}
 
-		Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
+		Circle* ball = new Circle(App->physics, 242.0f * SCALE, 330.0f * SCALE, circle);
 		entities.emplace_back(ball);
 		entities[(entities.size() - 1)]->setListener(this);
 
@@ -716,14 +716,14 @@ update_status ModuleGame::Update()
 			entities[i]->body->GetPhysicPosition(x, y);
 			if (y >= SCREEN_HEIGHT * SCALE) {
 				entities.erase(entities.begin() + i);
-				TraceLog(LOG_INFO, "ADIOS BOLA ;)");
-				Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
+				TraceLog(LOG_INFO, "BALL REMOVED");
+				Circle* ball = new Circle(App->physics, 242.0f * SCALE, 330.0f * SCALE, circle);
 				entities.emplace_back(ball);
 				entities[(entities.size() - 1)]->setListener(this);
 				lifes--;
 			}
 			if (x >= 162 && x <= 192 && y <= 300 && y >= 280 && extraBall) {
-				Circle* ball = new Circle(App->physics, 242.0f * SCALE, 320.0f * SCALE, circle);
+				Circle* ball = new Circle(App->physics, 242.0f * SCALE, 330.0f * SCALE, circle);
 				entities.emplace_back(ball);
 				entities[(entities.size() - 1)]->setListener(this);
 				extraBall = false;
@@ -740,7 +740,7 @@ update_status ModuleGame::Update()
 				App->physics->DeleteBody(entities[i]->body->body);
 				entities.erase(entities.begin() + i);
 				i--;
-				TraceLog(LOG_INFO, "BOLA ELIMINADA");
+				TraceLog(LOG_INFO, "BALL REMOVED");
 			}
 		}
 
@@ -813,10 +813,10 @@ void ModuleGame::OnCollision(PhysBody* A, PhysBody* B) {
 	switch (A->ctype)
 	{
 	case ColliderType::FLIPPER:
-		TraceLog(LOG_INFO, "FLIPPER");
+		TraceLog(LOG_INFO, "COLLISION - FLIPPER");
 		break;
 	case ColliderType::BOUNCE:
-		TraceLog(LOG_INFO, "BOUNCE");
+		TraceLog(LOG_INFO, "COLLISION - BOUNCE");
 		if (!endRun) {
 			score += (rand() % 9000 + 1000);
 			App->audio->PlayFx(bonus_fx);
@@ -824,17 +824,17 @@ void ModuleGame::OnCollision(PhysBody* A, PhysBody* B) {
 		break;
 
 	case ColliderType::NORMAL:
-		TraceLog(LOG_INFO, "NORMAL");
+		TraceLog(LOG_INFO, "COLLISION - NORMAL");
 		if (!endRun && B->ctype == ColliderType::BALL) {
 			score += (rand() % 4000 + 1000);
 			App->audio->PlayFx(bonus_fx);
 		}
 		break;
 	case ColliderType::WALL:
-		TraceLog(LOG_INFO, "WALL");
+		TraceLog(LOG_INFO, "COLLISION - WALL");
 		break;
 	case ColliderType::SPRING:
-		TraceLog(LOG_INFO, "SPRING");
+		TraceLog(LOG_INFO, "COLLISION - SPRING");
 		break;
 	default:
 		break;
