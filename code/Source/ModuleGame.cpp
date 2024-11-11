@@ -636,15 +636,6 @@ bool ModuleGame::Start()
 	};
 	obstacles.emplace_back(new CollisionChain(App->physics, pinball10, 10, ColliderType::NORMAL));
 
-	//b2Vec2 bumperRectangle1[] = {
-	//b2Vec2(63, 765),  // Primer vértice
-	////b2Vec2(95, y1),  // Segundo vértice
-	////b2Vec2(x2, y2),  // Tercer vértice
-	////b2Vec2(x1, y2),  // Cuarto vértice
-	////b2Vec2(x1, y1)   // Volver al primer vértice para cerrar el rectángulo
-	//};
-	//obstacles.emplace_back(new CollisionChain(App->physics, bumperRectangle1, 5, ColliderType::PIKACHU));
-
 	for (auto i : obstacles) i->setListener(this);
 
 	return ret;
@@ -698,6 +689,7 @@ update_status ModuleGame::Update()
 	{
 		for (int i = 0; i < entities.size(); i++) {
 			if (entities[i]->body->ctype == ColliderType::BALL) {
+				App->physics->DeleteBody(entities[i]->body->body);
 				entities.erase(entities.begin() + i);
 				i--;
 				TraceLog(LOG_INFO, "BOLA ELIMINADA");
@@ -745,6 +737,7 @@ update_status ModuleGame::Update()
 		endRun = true;
 		for (int i = 0; i < entities.size(); i++) {
 			if (entities[i]->body->ctype == ColliderType::BALL) {
+				App->physics->DeleteBody(entities[i]->body->body);
 				entities.erase(entities.begin() + i);
 				i--;
 				TraceLog(LOG_INFO, "BOLA ELIMINADA");
@@ -810,6 +803,7 @@ update_status ModuleGame::Update()
 
 
 	DrawScore();
+	if (App->physics->getDebug()) DrawFPS(10,10);
 
 	return UPDATE_CONTINUE;
 }

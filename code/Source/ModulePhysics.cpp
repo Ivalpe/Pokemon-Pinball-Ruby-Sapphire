@@ -585,6 +585,7 @@ PhysBody* ModulePhysics::CreatePikaSpring(bool right) {
 
 
 	PhysBody* pbody = new PhysBody();
+	pbody->ctype = ColliderType::PIKACHU;
 	if (right) {
 		pbody->body = pikaBody;
 		pikaBody->GetUserData().pointer = (uintptr_t)pbody;
