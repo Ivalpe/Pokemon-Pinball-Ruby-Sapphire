@@ -74,11 +74,13 @@ private:
 
 	bool debug;
 	b2World* world;
+	b2Body* ground;
 
 	//Kicker
 	b2Body* kickerBody;
 	b2Body* pikaBody;
 	b2Body* pikaBodytwo;
+	b2MouseJoint* mouse_joint;
 	b2RevoluteJoint* leftFlipper;
 	b2RevoluteJoint* rightFlipper;
 	bool kickerActivated = false;
